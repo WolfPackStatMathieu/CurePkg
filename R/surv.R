@@ -54,4 +54,26 @@ simul_survie<-function(n,lambda,t_star){
   transformation <- transformation / 100
   return(transformation)
 }
+#' Generer N fois un echantillon de taille n
+#'
+#' @param N nombre de fois generation echantillon
+#' @param n taille echantillonn
+#' @param lambda parametre loi exponentielle.
+#' @param t_star fin de la fenetre.
+#'
+#' @return Generer N fois un echantillon de taille n
+#' @export
+#'
+#' @examples
+#' lambda_test<-1/3
+#' n<-100
+#' t_star<-6
+#' N<-100
+#' test_simul_total<-Simuler_Nfois_n_echantillons(N,n,lambda_test,t_star)
 
+Simuler_Nfois_n_echantillons<-function(N,n,lambda,t_star){
+  vecteur_biais<-rep(NA,N)
+  vecteur_taille<-rep(n,N)
+  vecteur_biais<-sapply(vecteur_taille,fonction_biais_survie,lambda=lambda,t_star=t_star)
+  return(vecteur_biais)
+}
