@@ -77,3 +77,20 @@ Simuler_Nfois_n_echantillons<-function(N,n,lambda,t_star){
   vecteur_biais<-sapply(vecteur_taille,fonction_biais_survie,lambda=lambda,t_star=t_star)
   return(vecteur_biais)
 }
+#' Biais.
+#'
+#' @param n
+#' @param lambda
+#' @param t_star
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fonction_biais_survie<-function(n,lambda,t_star){
+  #### Calcul du biais de la probabilite de toxicite estimee par la fonction simul_survie.
+  ### Comparaison avec la fonction de repartition d'une exp(lambda) en t_star.
+  estimateur<-simul_survie(n,lambda,t_star)
+  valeur_theorique<-pexp(t_star,rate=lambda)
+  return(abs(valeur_theorique-estimateur))
+}
