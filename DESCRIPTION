@@ -16,5 +16,5 @@ Imports:
     stringr
     stats
     Rlab
-    ggplot2
     gridExtra
+    ggplot2
