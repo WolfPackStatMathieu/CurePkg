@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples
-#' test avec le modèle "survie"
-#' ---------------------------
+#' #test avec le modèle "survie"
+#' #---------------------------
 #' N<-100
 #' vecteur_size<-sample(c(1:1000),N)
 #' lamdba_test<-0.33
@@ -23,23 +23,23 @@
 #' k<-20
 #' res <- fonction_generation_taille_mean(vector_size=vecteur_size,model=modele,K=k,liste_parameter = liste_parameter)
 #'
-#' plot des résultats
-#' ------------------
+#' #plot des résultats
+#' #------------------
 #' donnees_taille_biaismoyen<-cbind.data.frame(vecteur_size[order(vecteur_size)],res)
 #' colnames(donnees_taille_biaismoyen)<-c("Size","Mean_Bias")
 #' plot(donnees_taille_biaismoyen,main="The mean bias according to the size with Survival function")
 #' lines(x=donnees_taille_biaismoyen$Size,y=estimation_ymoy,col="red")
 #'
-#' test avec le modèle bernouilli
-#' ------------------------------
+#' #test avec le modèle bernouilli
+#' #------------------------------
 #' prop<-0.33
 #' liste_param<-list(prop)
 #' names(liste_param)<-c("p")
 #' modele1<-"bernoulli"
 #' test_bern_taillemoy<-fonction_generation_taille_mean(vector_size=vecteur_size,model=modele1,K=k,liste_parameter = liste_param)
 #'
-#' plot des resultats
-#' ------------------
+#' #plot des resultats
+#' #------------------
 #' donnees_bern_biaismoyen<-cbind.data.frame(vecteur_size[order(vecteur_size)],test_bern_taillemoy)
 #' plot(donnees_bern_biaismoyen,main="The mean bias according to the size with Bernoulli")
 #' lines(x=donnees_bern_biaismoyen$Size,y=estimation_ymoy,col="blue")

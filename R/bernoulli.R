@@ -14,7 +14,7 @@
 #' test
 simul_bernoulli<-function(n,p){
   ### simuler un n_echantillon d'une Bernoulli(p).
-  return(rbern(n,p))
+  return(Rlab::rbern(n,p))
 }
 
 

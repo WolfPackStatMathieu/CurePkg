@@ -69,6 +69,7 @@ simul_survie_weibull<-function(n,lambda,k,t_star){
 #'
 #' @examples
 #' lambda_test<-1/3
+#' N<-20
 #' k<-3
 #' n<-100
 #' t_star<-6
