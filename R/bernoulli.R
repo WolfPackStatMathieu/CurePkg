@@ -53,8 +53,8 @@ biais_pi<-function(n,p){
 #' N<-100
 #' p<-0.33
 #' test_simul_bern_total<-Simuler_Nfois_n_echantillons_bern(N,n,p)
-#' boxplot(test_simul_bern_total,main="Distribution du biais pour le modele de guerison",col="red")
 Simuler_Nfois_n_echantillons_bern<-function(N,n,p){
+# boxplot(test_simul_bern_total,main="Distribution du biais pour le modele de guerison",col="red")
   #### Simuler
   vecteur_biais<-rep(NA,N)
   vecteur_taille<-rep(n,N)
@@ -63,4 +63,4 @@ Simuler_Nfois_n_echantillons_bern<-function(N,n,p){
   return(vecteur_biais)
 }
 
-boxplot(test_simul_bern_total,main="Distribution du biais pour le mod?le de guerison",col="red")
+# boxplot(test_simul_bern_total,main="Distribution du biais pour le mod?le de guerison",col="red")
