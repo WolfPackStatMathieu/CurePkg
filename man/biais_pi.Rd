@@ -13,9 +13,12 @@ biais_pi(n, p)
 \item{p}{parametre de la loi de Bernoulli utilisee}
 }
 \value{
-valeur du biais
+valeur du biais retourné
 }
 \description{
 calcule le biais de la probabilite estimee de toxicite selon une Bernoulli(p)
 Compare avec la valeur theorique.
+}
+\examples{
+test_biais<-biais_pi(18,0.33)
 }
