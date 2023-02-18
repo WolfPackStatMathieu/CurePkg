@@ -19,8 +19,8 @@
 #' names(liste_parameter)<-c("n","t_star")
 #' test <-lambda_func(lambda_vec=lambda_vec,list_params =  liste_parameter)
 #'
-#' plot du résultat
-#' ----------------
+#' #plot du résultat
+#' #----------------
 #' ggplot(data.frame(x = lambda_vec, y = test), aes(x = x, y = y)) + geom_line(color = "blue", size = 1.5) + ggtitle("Bias with different lambdas") + xlab("lambda") + ylab("Biais") + theme_minimal()
 lambda_func <- function(lambda_vec, list_params){
   vec_biais_surv <- sapply(lambda_vec,fonction_biais_survie,n=list_params[["n"]],t_star=list_params[["t_star"]])
@@ -40,8 +40,8 @@ lambda_func <- function(lambda_vec, list_params){
 #' vec_p <- c(0.2,0.33,0.24,0.12,0.18)
 #' test1 <- pbinom_func(vec_p, n)
 #'
-#' plot du résultat
-#' ----------------
+#' #plot du résultat
+#' #----------------
 #' ggplot(data.frame(x = vec_p, y = test1), aes(x = x, y = y)) + geom_line(color = "blue", size = 1.5) + ggtitle("Bias with different probabilities") + xlab("p") + ylab("Bias") + theme_minimal()
 pbinom_func <- function(p_vec, n){
   vec_biais_binom <- sapply(p_vec,biais_pi,n=n)

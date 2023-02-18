@@ -26,5 +26,4 @@ lambda_test<-1/3
 k<-3
 n<-100
 t_star<-6
-test_biais_weibull<-fonction_biais_survie_weibull(n,lambda=lambda_test,k,t_star)
 }
