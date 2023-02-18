@@ -27,7 +27,6 @@ simul_weibull<-function(n,lambda,k){
 #' k<-3
 #' n<-100
 #' t_star<-6
-#' test_biais_weibull<-fonction_biais_survie_weibull(n,lambda=lambda_test,k,t_star)
 simul_survie_weibull<-function(n,lambda,k,t_star){
 
   donnees<-simul_weibull(n,lambda,k)
@@ -55,7 +54,28 @@ simul_survie_weibull<-function(n,lambda,k,t_star){
   transformation <- transformation / 100
   return(transformation)
 }
-
+#' Calculer le biais d'une Weibull k,lambda.
+#'
+#' @param n
+#' @param lambda
+#' @param k
+#' @param t_star
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' N<-20
+#' lambda_test<-1/3
+#' k<-3
+#' n<-100
+#' t_star<-6
+#' test_biais_weibull<-fonction_biais_survie_weibull(n,lambda=lambda_test,k,t_star)
+fonction_biais_survie_weibull<-function(n,lambda,k,t_star){
+  estimateur<-simul_survie_weibull(n,lambda,k,t_star)
+  valeur_theorique<-pweibull(t_star,scale=lambda,shape=k)
+  return(abs(valeur_theorique-estimateur))
+}
 #' Generer N fois un echantillon de taille n et trouver le biais.
 #'
 #' @param N nombre de simulation
