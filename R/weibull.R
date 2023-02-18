@@ -55,3 +55,51 @@ simul_survie_weibull<-function(n,lambda,k,t_star){
   transformation <- transformation / 100
   return(transformation)
 }
+
+#' Generer N fois un echantillon de taille n et trouver le biais.
+#'
+#' @param N nombre de simulation
+#' @param n taille de l'echantillon
+#' @param lambda parametre de la Weibull, scale.
+#' @param k parametre de la weibull, shape.
+#' @param t_star fin de la fenetre d'observation.
+#'
+#' @return valeur du biais pour les N simulations.
+#' @export
+#'
+#' @examples
+#' lambda_test<-1/3
+#' k<-3
+#' n<-100
+#' t_star<-6
+#' vecteur<-Simuler_Nfois_n_weibull(N,n,lambda=lambda_test,k,t_star)
+Simuler_Nfois_n_weibull<-function(N,n,lambda,k,t_star){
+  vecteur_biais<-rep(NA,N)
+  vecteur_taille<-rep(n,N)
+  vecteur_biais<-sapply(vecteur_taille,fonction_biais_survie_weibull,lambda=lambda,k=k,t_star=t_star)
+  return(vecteur_biais)
+}
+#' Generer le biais en fonction d'un nombre de k (shape) differents.
+#'
+#' @param n taille de l'echantillon.
+#' @param lim_moins valeur minimale de la fenetre des k.
+#' @param lim_plus valeur maximale de la fenetre des k.
+#' @param lambda valeur de la loi Weibull (scale).
+#' @param t_star fin de la fenetre d'observation.
+#' @param number_k Nombre de k differents etudies.
+#'
+#' @return Valeur du biais pour tous les k differents etudies.
+#' @export
+#'
+#' @examples
+#' number_trials<-10
+#' l_plus<-5
+#' l_moins<-0.1
+#' vecteur_k_bias<-function_influence_rate(n,lim_moin=l_moins,lim_plus=l_plus,
+#' lambda=lambda_test,number_k=number_trials,t_star=t_star)
+function_influence_rate<-function(n,lim_moins,lim_plus,lambda,t_star,number_k){
+
+  vector_k<-as.vector(seq.int(lim_moins,lim_plus,length.out = number_k))
+  curve_k<-sapply(vector_k,fonction_biais_survie_weibull,lambda=lambda,t_star=t_star,n=n)
+  return(curve_k)
+}
