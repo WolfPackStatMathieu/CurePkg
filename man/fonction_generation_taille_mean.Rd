@@ -26,7 +26,7 @@ Génére n fois le modèle
 #---------------------------
 N<-100
 vecteur_size<-sample(c(1:1000),N)
-lamdba_test<-0.33
+lambda_test<-0.33
 t_star<-6
 liste_parameter<-list(lambda_test,t_star)
 names(liste_parameter)<-c("lambda","t_star")
@@ -39,7 +39,6 @@ res <- fonction_generation_taille_mean(vector_size=vecteur_size,model=modele,K=k
 donnees_taille_biaismoyen<-cbind.data.frame(vecteur_size[order(vecteur_size)],res)
 colnames(donnees_taille_biaismoyen)<-c("Size","Mean_Bias")
 plot(donnees_taille_biaismoyen,main="The mean bias according to the size with Survival function")
-lines(x=donnees_taille_biaismoyen$Size,y=estimation_ymoy,col="red")
 
 #test avec le modèle bernouilli
 #------------------------------
@@ -53,6 +52,5 @@ test_bern_taillemoy<-fonction_generation_taille_mean(vector_size=vecteur_size,mo
 #------------------
 donnees_bern_biaismoyen<-cbind.data.frame(vecteur_size[order(vecteur_size)],test_bern_taillemoy)
 plot(donnees_bern_biaismoyen,main="The mean bias according to the size with Bernoulli")
-lines(x=donnees_bern_biaismoyen$Size,y=estimation_ymoy,col="blue")
 
 }

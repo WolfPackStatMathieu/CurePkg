@@ -23,7 +23,7 @@ Renvoie la valeur du biais et la taille des echantillons dans la meme table.
 ######1) exp#####
 N<-50
 vecteur_size<-sample(c(10:1000),N)
-lamdba_test<-0.33
+lambda_test<-0.33
 t_star<-6
 liste_parameter<-list(lambda_test,t_star)
 names(liste_parameter)<-c("lambda","t_star")

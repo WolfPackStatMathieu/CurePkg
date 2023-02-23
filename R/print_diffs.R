@@ -36,14 +36,14 @@ fonction_compar_plots<-function(limit_inf,limit_sup,N,p,lambda,t_star,K){
   whole_data_expbern<-cbind.data.frame(vector_size,result1,result2)
   colnames(whole_data_expbern)<-c("Size","Mean_Bias_Bern","Mean_Bias_Surv")
   ####plot
-  gg1<-ggplot(data=whole_data_expbern,aes(x=Size,y=Mean_Bias_Bern))+
-    geom_smooth(colour="red")+
-    labs(y="Mean Bias with Bern model")
+  gg1<-ggplot2::ggplot(data=whole_data_expbern,ggplot2::aes(x=Size,y=Mean_Bias_Bern))+
+    ggplot2::geom_smooth(colour="red")+
+    ggplot2::labs(y="Mean Bias with Bern model")
 
-  gg2<-ggplot(data=whole_data_expbern,aes(x=Size,y=Mean_Bias_Surv))+
-    geom_smooth(colour="blue")+
-    labs(y="Mean Bias with Surv model")
+  gg2<-ggplot2::ggplot(data=whole_data_expbern,ggplot2::aes(x=Size,y=Mean_Bias_Surv))+
+    ggplot2::geom_smooth(colour="blue")+
+    ggplot2::labs(y="Mean Bias with Surv model")
 
-  whole_g<-grid.arrange(gg1,gg2,ncol=2,top="Comparison of the two methods")
+  whole_g<-gridExtra::grid.arrange(gg1,gg2,ncol=2,top="Comparison of the two methods")
   return(whole_g)
 }

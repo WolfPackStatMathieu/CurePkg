@@ -114,8 +114,11 @@ Simuler_Nfois_n_weibull<-function(N,n,lambda,k,t_star){
 #'
 #' @examples
 #' number_trials<-10
+#' n <-100
 #' l_plus<-5
 #' l_moins<-0.1
+#' t_star <- 6
+#' lambda_test <- 1
 #' vecteur_k_bias<-function_influence_rate(n,lim_moin=l_moins,lim_plus=l_plus,
 #' lambda=lambda_test,number_k=number_trials,t_star=t_star)
 function_influence_rate<-function(n,lim_moins,lim_plus,lambda,t_star,number_k){
