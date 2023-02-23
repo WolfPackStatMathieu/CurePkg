@@ -33,7 +33,7 @@ biais_pi<-function(n,p){
   ### calculer le biais de la probabilite estimee de toxicite selon une Bernoulli(p).
   ### Comparaison avec la valeur theorique.
   simulation<-simul_bernoulli(n,p)
-  biais<-abs(mean(simulation)-p)
+  biais<-mean(simulation)-p
   return(biais)
 }
 
