@@ -92,5 +92,5 @@ fonction_biais_survie<-function(n,lambda,t_star){
   ### Comparaison avec la fonction de repartition d'une exp(lambda) en t_star.
   estimateur<-simul_survie(n,lambda,t_star)
   valeur_theorique<-pexp(t_star,rate=lambda)
-  return(abs(valeur_theorique-estimateur))
+  return(estimateur-valeur_theorique)
 }
