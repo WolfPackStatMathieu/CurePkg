@@ -74,7 +74,7 @@ simul_survie_weibull<-function(n,lambda,k,t_star){
 fonction_biais_survie_weibull<-function(n,lambda,k,t_star){
   estimateur<-simul_survie_weibull(n,lambda,k,t_star)
   valeur_theorique<-pweibull(t_star,scale=lambda,shape=k)
-  return(abs(valeur_theorique-estimateur))
+  return(estimateur-valeur_theorique)
 }
 #' Generer N fois un echantillon de taille n et trouver le biais.
 #'
