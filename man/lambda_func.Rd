@@ -4,7 +4,7 @@
 \alias{lambda_func}
 \title{Calcule le biais à partir d'un vecteur de lambdas}
 \usage{
-lambda_func(lambda_vec, list_params)
+lambda_func(lambda_vec, list_params, N)
 }
 \arguments{
 \item{lambda_vec}{: vecteur de lambdas}
@@ -20,10 +20,11 @@ Calcule le biais à partir d'un vecteur de lambdas
 \examples{
 n<-100
 t_star<-6
+N<-20
 lambda_vec <- c(0.8,0.41, 0.28, 0.25,0.42, 0.04)
 liste_parameter<-list(n,t_star)
 names(liste_parameter)<-c("n","t_star")
-test <-lambda_func(lambda_vec=lambda_vec,list_params =  liste_parameter)
+test <-lambda_func(lambda_vec=lambda_vec,list_params =  liste_parameter,N=N)
 
 #plot du résultat
 #----------------

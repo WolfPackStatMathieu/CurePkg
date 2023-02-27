@@ -4,7 +4,7 @@
 \alias{pbinom_func}
 \title{Génère le biais à partir d'un vecteur de probabilité p}
 \usage{
-pbinom_func(p_vec, n)
+pbinom_func(p_vec, n, N)
 }
 \arguments{
 \item{p_vec}{: vecteur de probabilités}
@@ -19,9 +19,11 @@ Génère le biais à partir d'un vecteur de probabilité p
 }
 \examples{
 vec_p <- c(0.2,0.33,0.24,0.12,0.18)
-test1 <- pbinom_func(vec_p, n)
+n <- 100
+N<-20
+test1 <- pbinom_func(vec_p, n,N=N)
 
 #plot du résultat
 #----------------
-ggplot(data.frame(x = vec_p, y = test1), aes(x = x, y = y)) + geom_line(color = "blue", size = 1.5) + ggtitle("Bias with different probabilities") + xlab("p") + ylab("Bias") + theme_minimal()
+ggplot2::ggplot(data.frame(x = vec_p, y = test1), ggplot2::aes(x = x, y = y)) + ggplot2::geom_line(color = "blue", size = 1.5) + ggplot2::ggtitle("Bias with different probabilities") + ggplot2::xlab("p") + ggplot2::ylab("Bias") + ggplot2::theme_minimal()
 }
