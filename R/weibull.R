@@ -10,7 +10,7 @@
 #' @examples
 #' test_simul<-simul_weibull(100,0.1,1)
 simul_weibull<-function(n,lambda,k){
-  return(rweibull(n,shape=k,scale=lambda))
+ return(rweibull(n,shape=k,scale=1/lambda))
 }
 #' Trouver le quantile a t_star de la fonction de survie (Kaplan-Meier).
 #'
@@ -28,15 +28,13 @@ simul_weibull<-function(n,lambda,k){
 #' n<-100
 #' t_star<-6
 simul_survie_weibull<-function(n,lambda,k,t_star){
-
   donnees<-simul_weibull(n,lambda,k)
   donnees_censure_tstar<-ifelse(donnees<t_star,donnees,t_star)
   donnees_indicatrice_observee<-ifelse(donnees<t_star,1,0)
   donnees_ensemble<-cbind.data.frame(donnees_censure_tstar,donnees_indicatrice_observee)
   colnames(donnees_ensemble)<-c("tox_time","isobserved")
-  surv_object<-survival::Surv(donnees_ensemble$tox_time,event=donnees_ensemble$isobserved)
-  fit <- survival::survfit(surv_object ~1, data = donnees_ensemble)
-  summary(fit)
+  surv_object<-Surv(donnees_ensemble$tox_time,event=donnees_ensemble$isobserved)
+  fit <- survfit(surv_object ~1, data = donnees_ensemble)
   # on cherche a recuperer les donnees au temps T=6
   #afin de pouvoir tracer la droite Toxicite =f(dose)
   quantile <-quantile(fit)
