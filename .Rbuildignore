@@ -1,4 +1,4 @@
 ^CurePkg\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
-^man\*$
+^man/*$
