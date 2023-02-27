@@ -21,7 +21,7 @@
 #'
 #' #plot du résultat
 #' #----------------
-#' ggplot(data.frame(x = lambda_vec, y = test), aes(x = x, y = y)) + geom_line(color = "blue", size = 1.5) + ggtitle("Bias with different lambdas") + xlab("lambda") + ylab("Biais") + theme_minimal()
+#' ggplot2::ggplot(data.frame(x = lambda_vec, y = test), ggplot2::aes(x = x, y = y)) + ggplot2::geom_line(color = "blue", size = 1.5) + ggplot2::ggtitle("Bias with different lambdas") + ggplot2::xlab("lambda") + ggplot2::ylab("Biais") + ggplot2::theme_minimal()
 lambda_func <- function(lambda_vec, list_params){
   vec_biais_surv <- sapply(lambda_vec,fonction_biais_survie,n=list_params[["n"]],t_star=list_params[["t_star"]])
   return(vec_biais_surv)
@@ -38,11 +38,12 @@ lambda_func <- function(lambda_vec, list_params){
 #'
 #' @examples
 #' vec_p <- c(0.2,0.33,0.24,0.12,0.18)
+#' n <- 100
 #' test1 <- pbinom_func(vec_p, n)
 #'
 #' #plot du résultat
 #' #----------------
-#' ggplot(data.frame(x = vec_p, y = test1), aes(x = x, y = y)) + geom_line(color = "blue", size = 1.5) + ggtitle("Bias with different probabilities") + xlab("p") + ylab("Bias") + theme_minimal()
+#' ggplot2::ggplot(data.frame(x = vec_p, y = test1), ggplot2::aes(x = x, y = y)) + ggplot2::geom_line(color = "blue", size = 1.5) + ggplot2::ggtitle("Bias with different probabilities") + ggplot2::xlab("p") + ggplot2::ylab("Bias") + ggplot2::theme_minimal()
 pbinom_func <- function(p_vec, n){
   vec_biais_binom <- sapply(p_vec,biais_pi,n=n)
   return(vec_biais_binom)

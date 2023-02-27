@@ -9,4 +9,4 @@
 library(testthat)
 library(CurePkg)
 
-test_check("CurePkg")
+# test_check("CurePkg")

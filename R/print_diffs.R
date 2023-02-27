@@ -44,7 +44,7 @@ fonction_compar_plots<-function(limit_inf,limit_sup,N,p,lambda,t_star,K){
     geom_point(colour="blue")+
     labs(y="Mean Bias with Surv model")
 
-  whole_g<-grid.arrange(gg1,gg2,ncol=2,top="Comparison of the two methods")
+  whole_g<-gridExtra::grid.arrange(gg1,gg2,ncol=2,top="Comparison of the two methods")
   return(whole_g)
 }
 NSimulations.selon.n<-function(N,lambda,t_star){
