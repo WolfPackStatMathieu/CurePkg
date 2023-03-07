@@ -37,15 +37,15 @@ fonction_compar_plots<-function(limit_inf,limit_sup,N,p,lambda,t_star,K,sh){
   result2<-fonction_generation_taille_mean(vector_size,modele_exp,liste_param2,K)
   whole_data_expbern<-cbind.data.frame(vector_size,result1,result2)
   colnames(whole_data_expbern)<-c("Size","Mean_Bias_Bern","Mean_Bias_Surv")
-  ####plot 
-  gg1<-ggplot(data=whole_data_expbern,aes(x=Size,y=Mean_Bias_Bern))+
-    geom_point(colour="red")+
-    labs(y="Mean Bias with Bern model")
-  
-  gg2<-ggplot(data=whole_data_expbern,aes(x=Size,y=Mean_Bias_Surv))+
-    geom_point(colour="blue")+
-    labs(y="Mean Bias with Surv model")
-  
+  ####plot
+  gg1<-ggplot2::ggplot(data=whole_data_expbern,ggplot2::aes(x=Size,y=Mean_Bias_Bern))+
+    ggplot2::geom_point(colour="red")+
+    ggplot2::labs(y="Mean Bias with Bern model")
+
+  gg2<-ggplot2::ggplot(data=whole_data_expbern,ggplot2::aes(x=Size,y=Mean_Bias_Surv))+
+    ggplot2::geom_point(colour="blue")+
+    ggplot2::labs(y="Mean Bias with Surv model")
+
   whole_g<-gridExtra::grid.arrange(gg1,gg2,ncol=2,top="Comparison of the two methods")
   return(whole_g)
 }
