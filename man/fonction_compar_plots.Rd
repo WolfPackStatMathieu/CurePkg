@@ -4,7 +4,7 @@
 \alias{fonction_compar_plots}
 \title{Plot des valeurs des biais moyens selon la taille des echantillons.}
 \usage{
-fonction_compar_plots(limit_inf, limit_sup, N, p, lambda, t_star, K)
+fonction_compar_plots(limit_inf, limit_sup, N, p, lambda, t_star, K, sh)
 }
 \arguments{
 \item{limit_inf}{taille minimale des echantillons}
@@ -36,5 +36,6 @@ t_star<-6
 lmoins<-1
 l_plus<-1000
 N<-50
-test_plot<-fonction_compar_plots(limit_sup = l_plus,limit_inf = lmoins,N=N,p=p2,lambda=lambda7,t_star=t_star,K=k)
+shape<-2
+test_plot<-fonction_compar_plots(limit_sup = l_plus,limit_inf = lmoins,N=N,p=p2,lambda=lambda7,t_star=t_star,K=k,sh=shape)
 }

@@ -9,8 +9,6 @@ fonction_compar_plotsn_lambda(N, window_lambda, t_star)
 \arguments{
 \item{N}{nombre de tailles d'echantillon differents.}
 
-\item{window_lambda}{}
-
 \item{t_star}{fin de la fenetre d'observation}
 }
 \value{
