@@ -4,16 +4,16 @@
 \alias{fonction_generation_taille_mean}
 \title{Génére n fois le modèle}
 \usage{
-fonction_generation_taille_mean(vector_size, model, liste_parameter, K)
+fonction_generation_taille_mean(vector_size, liste_parameter, K)
 }
 \arguments{
 \item{vector_size}{: un vecteur de taille d'échantillon}
 
-\item{model}{: modèle bernouilli ou surv}
-
 \item{liste_parameter}{: liste des paramètres}
 
 \item{K}{: nombre de fois que l'on génère un échantillon de taille n}
+
+\item{model}{: modèle bernouilli ou surv}
 }
 \value{
 : Génére n fois le modèle (bernouilli ou survie)
@@ -24,33 +24,19 @@ Génére n fois le modèle
 \examples{
 #test avec le modèle "survie"
 #---------------------------
-N<-100
-vecteur_size<-sample(c(1:1000),N)
-lambda_test<-0.33
+N<-10
+vecteur_size<-sample(c(1:100),N)
+lamdba_test<-3
 t_star<-6
-liste_parameter<-list(lambda_test,t_star)
-names(liste_parameter)<-c("lambda","t_star")
-modele<-"surv"
-k<-20
-res <- fonction_generation_taille_mean(vector_size=vecteur_size,model=modele,K=k,liste_parameter = liste_parameter)
-
-#plot des résultats
-#------------------
-donnees_taille_biaismoyen<-cbind.data.frame(vecteur_size[order(vecteur_size)],res)
-colnames(donnees_taille_biaismoyen)<-c("Size","Mean_Bias")
-plot(donnees_taille_biaismoyen,main="The mean bias according to the size with Survival function")
-
-#test avec le modèle bernouilli
-#------------------------------
-prop<-0.33
-liste_param<-list(prop)
-names(liste_param)<-c("p")
-modele1<-"bernoulli"
-test_bern_taillemoy<-fonction_generation_taille_mean(vector_size=vecteur_size,model=modele1,K=k,liste_parameter = liste_param)
-
-#plot des resultats
-#------------------
-donnees_bern_biaismoyen<-cbind.data.frame(vecteur_size[order(vecteur_size)],test_bern_taillemoy)
-plot(donnees_bern_biaismoyen,main="The mean bias according to the size with Bernoulli")
-
+p<-0.33
+k<-1
+liste_parameter<-list(lambda_test,t_star,p=p,k)
+names(liste_parameter)<-c("lambda","t_star","p","k")
+K2<-20
+test_exp_taillemoy<-fonction_generation_taille_mean(vector_size=vecteur_size,K=K2,liste_parameter = liste_parameter)
+#################### Plot des r?sultats en fonction de la taille.########
+donnees_taille_biaismoyen<-cbind.data.frame(vecteur_size[order(vecteur_size)],test_exp_taillemoy)
+colnames(donnees_taille_biaismoyen)<-c("Size","Mean_Bias_Cure","Mean_Bias_Surv")
+plot(donnees_taille_biaismoyen$Size,donnees_taille_biaismoyen$Mean_Bias_Cure,main="The mean bias according to the size with Survival function")
+points(x=donnees_taille_biaismoyen$Size,y=donnees_taille_biaismoyen$Mean_Bias_Surv,col="red")
 }
