@@ -22,30 +22,29 @@
 #' N<-50
 #' shape<-2
 #' test_plot<-fonction_compar_plots(limit_sup = l_plus,limit_inf = lmoins,N=N,p=p2,lambda=lambda7,t_star=t_star,K=k,sh=shape)
-
 fonction_compar_plots<-function(limit_inf,limit_sup,N,p,lambda,t_star,K,sh){
   #### N corresponds to the number of sizes. K correspond to the number of samples for each size.
   require(gridExtra)
+  require(ggplot2)
   vector_size<-sample(c(limit_inf:limit_sup),N)
   vector_size<-vector_size[order(vector_size)]
   liste_param<-list(lambda,t_star,sh,p)
   names(liste_param)<-c("lambda","t_star","k","p")
   result<-fonction_generation_taille_mean(vector_size,liste_param,K)
-  print(result)
   result$taille<-vector_size
   colnames(result)<-c("Mean_Bias_Cure","Mean_Bias_Surv","Size")
   ####plot
   borne_min<-min(min(result$Mean_Bias_Cure),min(result$Mean_Bias_Surv))
   borne_max<-max(max(result$Mean_Bias_Cure),max(result$Mean_Bias_Surv))
-  gg1<-ggplot(data=result,aes(x=Size,y=Mean_Bias_Cure))+
-    geom_point(colour="red")+
-    labs(y="Mean Bias with cure model")+ylim(borne_min,borne_max)
+  gg1<-ggplot2::ggplot(data=result,ggplot2::aes(x=Size,y=Mean_Bias_Cure))+
+    ggplot2::geom_point(colour="red")+
+    ggplot2::labs(y="Mean Bias with cure model")+ggplot2::ylim(borne_min,borne_max)
 
-  gg2<-ggplot(data=result,aes(x=Size,y=Mean_Bias_Surv))+
-    geom_point(colour="blue")+
-    labs(y="Mean Bias with Surv model")+ylim(borne_min,borne_max)
+  gg2<-ggplot2::ggplot(data=result,ggplot2::aes(x=Size,y=Mean_Bias_Surv))+
+    ggplot2::geom_point(colour="blue")+
+    ggplot2::labs(y="Mean Bias with Surv model")+ggplot2::ylim(borne_min,borne_max)
 
-  whole_g<-grid.arrange(gg1,gg2,ncol=2,top="Comparison of the two methods")
+  whole_g<-gridExtra::grid.arrange(gg1,gg2,ncol=2,top="Comparison of the two methods")
   return(whole_g)
 }
 NSimulations.selon.n<-function(N,lambda,t_star){

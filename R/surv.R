@@ -120,7 +120,7 @@ Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
   colnames(df)<-c("isobserved","tox_time")
   df$isobserved<-ifelse(df$tox_time<t_star,1,0)
   surv_object<-survival::Surv(df$tox_time,event=df$isobserved)
-  fit <- survfit(surv_object ~1, data = df)
+  fit <- survival::survfit(surv_object ~1, data = df)
   # on cherche a recuperer les donnees au temps T=6
   #afin de pouvoir tracer la droite Toxicite =f(dose)
   quantile <-quantile(fit)

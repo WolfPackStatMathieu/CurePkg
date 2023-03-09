@@ -26,7 +26,7 @@ Génére n fois le modèle
 #---------------------------
 N<-10
 vecteur_size<-sample(c(1:100),N)
-lamdba_test<-3
+lambda_test<-3
 t_star<-6
 p<-0.33
 k<-1
