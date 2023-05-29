@@ -1,0 +1,599 @@
+#source("estimateurs.R")
+#' Generer un echantillon de taille n selon le modèle de guérison à mélange.
+#'
+#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
+#' @param lambda : parametre de la loi weibull.
+#' @param t_star : Fin de la fenetre d'observation.
+#' @param k : paramètre de la loi weibull.
+#'
+#' @return : Un n-echantillon.
+#' @export
+#'
+#' @examples
+#' ####test#####
+#' k<-2
+#' lambda<-0.2
+#' ech<-Generation_un_ech(n=n,lambda=lambda,t_star=6,p=0.33,k=2)
+Generation_un_ech<-function(n,lambda,t_star,p,k){
+  vecteur_censure<-rbinom(n,1,p)
+  vecteur_temp<-rep(NA,n) # cree un vecteur des temps associ?s
+  # l'estimateur du modele de Bernoulli est la moyenne des 1 du vecteur_censure
+  # on cree un dataframe qui acolle la DLT au vecteur_temps
+  df<-cbind.data.frame(vecteur_censure,vecteur_temp)
+  #on les renomme
+  colnames(df)<-c("sensible","temps")
+  #recuperation des numeros de lignes des individus censures
+  id_non_sensibles<-which(df$sensible==0)
+  #recuperation des numeros de lignes des individus a risque de DLT
+  id_sensibles<-which(df$sensible==1)
+  #tous les individu censure se voient attribues comme temps la limite de la
+  #fenetre d observation
+  df[id_non_sensibles,2]<-t_star+1
+  # les autres individus se voient attribuer un temps simule a partir d une
+  # loi de Weibull (qui peut etre une loi exponentielle si k=1)
+  df[id_sensibles,2]<-simul_weibull(length(id_sensibles),lambda,k)
+  # bien sur, si le temps observe est superieur a la fenetre d observation, alors
+  # on le remplace par la fin de fenetre d observation
+  # on renomme les colonnes pour une meilleure interpretation
+  # on remplit la colonne isobserved avec des 1 si on observe une toxicite avant
+  #la fin de la fenetre d observation, sinon on met des 0
+  colnames(df)<-c("sensible","tox_time")
+  df$is_observed<-ifelse(df$tox_time<t_star,1,0)
+  return(df)
+}
+calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
+  #initialisation du dataframe
+  result_censures<- as.data.frame(matrix(NA, nrow = length(N), 3))
+  colnames(result_censures)<-c("prop_censure_totale", "prop_censure_gueris", "prop_censure_additionnelle")
+  j<-1 #compteur de ligne
+  for (i in 1:N){
+    ech <-Generation_un_ech(n,lambda,t_star,p,k) #genere un echantillon
+    #pourcentage de censure totale dans l echantillon
+    result_censures[j,"prop_censure_totale"] <-as.numeric(table(ech$is_observed == 0)["TRUE"])/n
+    # censure due au pourcentage de gueris, au debut de la generation de l echantillon
+    result_censures[j,"prop_censure_gueris"] <- as.numeric(table(ech$sensible == 0)["TRUE"])/n
+    # calcul de la censure additionnelle= censure_totale - censure_gueris
+    result_censures[j,"prop_censure_additionnelle"]<-result_censures[j,"prop_censure_totale"] - result_censures[j,"prop_censure_gueris"]
+
+    j<- j+1
+  }
+
+  # boxplot_plot_censures<-ggplot(result_censures) +
+  violin_plot <- result_censures %>%
+    gather(key="Type_de_censure", value="Val") %>%
+    ggplot( aes(x=Type_de_censure, y=Val, fill=Type_de_censure) ) +
+    geom_violin() +
+    ggtitle("Distribution des types de censure, modele de generation 1")+
+    ylab("Pourcentage de censure") + xlab("Type de censure")+
+    theme(axis.text=element_text(family = "Helvetica", size=18),
+          axis.title=element_text(family = "Helvetica", size=18),
+          plot.title = element_text(family = "Helvetica", size = 25)) +
+    labs(caption = sprintf("N = %s, n = %s, lambda= %s,t_star= %s, p= %s, alpha= %s", as.character(N),as.character(n), as.character(lambda), as.character(t_star),as.character(p), as.character(k)))
+  print(violin_plot)
+  return(result_censures)
+}
+
+#################Simulation en plusieurs fois.##########
+Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
+  database<-Generation_un_ech(n=n,lambda=lambda,t_star=t_star,p=p,k=k)
+  estimateur_bern<-fonction_Bern(df=database)
+  estimateur_surv<-fonction_KM(df=database)
+  estimateur_cure<-fonction_cure(df=database,t_star=t_star)
+  # on prepare une liste avec les deux estimateurs calcules
+  liste_biais<-list(estimateur_bern,estimateur_surv,estimateur_cure)
+  names(liste_biais)<-c("Modele_bernoulli","Modele_survie","Modele_guerison")
+  return(liste_biais)
+}
+Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
+  # Simuler_biais_un_n_ech retourne le biais du modele de guerison
+  # et le biais du modele de survie
+  # on cr?e un dataframe de K lignes de ces deux biais, pour des ?chantillons de
+  #taille n.
+  df_biases<-as.data.frame(t(cbind.data.frame(sapply(rep(n,K),Simuler_biais_un_n_ech,lambda=lambda,t_star=t_star,p=p,k=k))))
+  # on donne un nom aux deux colonnes
+  df_biases$Modele_bernoulli<-as.numeric(df_biases$Modele_bernoulli)
+  df_biases$Modele_survie<-as.numeric(df_biases$Modele_survie)
+  df_biases$Modele_guerison<-as.numeric(df_biases$Modele_guerison)
+  return(df_biases)
+}
+
+#############Biais##############
+########influence des params.#####
+biais.selon.k <-function(K, n, lambda, t_star,p){
+  k <- seq(0.8, 5, by = 0.1)
+  results <- NULL
+
+  for(i in c(1:length(k))){
+    vec.biais <- Simuler_biais_taillen(K, n, lambda, t_star, p, k[i])
+    biais.surv <- vec.biais$Modele_survie
+    biais.cure <- vec.biais$Modele_guerison
+    biais.bernoulli <- vec.biais$Modele_bernoulli
+    results <- rbind(results, c(k[i], mean(biais.surv) - p, mean(biais.cure) -p, mean(biais.bernoulli) -p ))
+  }
+  return(results)
+}
+fnct_compar_plt_biais.selon.k<-function(N, n, window_lambda,t_star,p){
+  #' Plot des valeurs des biais moyens selon la taille des echantillons et du lambda.
+  #'
+  #' @param N nombre de tailles d'echantillon differents.
+  #' @param window_lambda
+  #' @param t_star fin de la fenetre d'observation
+  #'
+  #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
+  #' @export
+  #'
+  #' @examples
+  #' ######Test ######
+
+
+  set.seed(12345)
+  RES<- NULL
+  RES<- biais.selon.k(N, n, window_lambda[1],t_star,p=p)
+  RES0.2.3<-data.frame(RES)
+
+  colnames( RES0.2.3)<- c("k","mean.surv", "mean.cure", "mean.bernoulli")
+  set.seed(12345)
+  RES<- NULL
+  RES<- biais.selon.k(N, n, window_lambda[2],t_star,p=p)
+  RES0.5.3<-data.frame(RES)
+  colnames( RES0.5.3)<- c("k","mean.surv", "mean.cure", "mean.bernoulli")
+
+  set.seed(12345)
+  RES<- NULL
+  RES<- biais.selon.k(N,n, window_lambda[3],t_star,p=p)
+  RES0.1.3<-data.frame(RES)
+  colnames( RES0.1.3)<- c("k","mean.surv", "mean.cure", "mean.bernoulli")
+
+
+  borne_min<-min(min(RES0.5.3$mean.surv),min(RES0.1.3$mean.surv),min(RES0.2.3$mean.surv))
+  borne_max<-max(max(RES0.5.3$mean.surv),max(RES0.1.3$mean.surv),max(RES0.5.3$mean.surv))
+
+  borne_min.c <- min(min(RES0.5.3$mean.cure),min(RES0.1.3$mean.cure),min(RES0.2.3$mean.cure))
+  borne_max.c <- max(max(RES0.5.3$mean.cure),max(RES0.1.3$mean.cure),max(RES0.5.3$mean.cure))
+
+  borne_min.b <- min(min(RES0.5.3$mean.bernoulli),min(RES0.1.3$mean.bernoulli),min(RES0.2.3$mean.bernoulli))
+  borne_max.b <- max(max(RES0.5.3$mean.bernoulli),max(RES0.1.3$mean.bernoulli),max(RES0.5.3$mean.bernoulli))
+
+  par(mfrow=c(2,2))
+  plot(RES0.2.3$k,RES0.2.3$mean.surv,main="Mod?le de survie",
+       ylim=c(-0.1+borne_min,borne_max+0.1),
+       type='b',xlab=expression(alpha),ylab="biais moyen")
+  lines(RES0.5.3$k,RES0.5.3$mean.surv,type="b",col="blue")
+  lines(RES0.1.3$k,RES0.1.3$mean.surv,type="b",col="red")
+  abline(h=0)
+
+
+  plot(RES0.2.3$k,RES0.2.3$mean.cure, main = "Mod?le de gu?rison",
+       ylim=c(-0.1+borne_min.c,borne_max.c+0.1),
+       type='b',xlab=expression(alpha),ylab="biais moyen")
+  lines(RES0.5.3$k,RES0.5.3$mean.cure,type="b",col="blue")
+  lines(RES0.1.3$k,RES0.1.3$mean.cure,type="b",col="red")
+  abline(h=0)
+
+  plot(RES0.2.3$k,RES0.2.3$mean.bernoulli,main="Mod?le de Bernoulli",
+       ylim=c(-0.1+borne_min.b,borne_max.b+0.1),
+       type='b',xlab=expression(alpha),ylab="biais moyen")
+  lines(RES0.5.3$k,RES0.5.3$mean.bernoulli,type="b",col="blue")
+  lines(RES0.1.3$k,RES0.1.3$mean.bernoulli,type="b",col="red")
+  abline(h=0)
+  legend("topright",
+         c("0.1","0.2","0.5"),
+         col=c("red","black","blue"),
+         lty=1)
+  plot.new()
+  legend("topright",
+         c("0.1","0.2","0.5"),
+         col=c("red","black","blue"),
+         lty=1)
+  mtext("Influence de alpha", side = 3, line = -24, outer = TRUE)
+}
+fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
+  library(gridExtra)
+  library(ggplot2)
+  # Generate the data
+  set.seed(12345)
+  RES <- biais.selon.k(N, n, window_lambda[1], t_star, p = p)
+  RES0.1.3 <- data.frame(RES)
+  colnames(RES0.1.3) <- c("k", "mean.surv", "mean.cure", "mean.bernoulli")
+
+  set.seed(12345)
+  RES <- biais.selon.k(N, n, window_lambda[2], t_star, p = p)
+  RES0.2.3 <- data.frame(RES)
+  colnames(RES0.2.3) <- c("k", "mean.surv", "mean.cure", "mean.bernoulli")
+
+  set.seed(12345)
+  RES <- biais.selon.k(N, n, window_lambda[3], t_star, p = p)
+  RES0.5.3 <- data.frame(RES)
+  colnames(RES0.5.3) <- c("k", "mean.surv", "mean.cure", "mean.bernoulli")
+
+  # Get the min and max bounds of each variable to be used in the plots
+  borne_min <- min(
+    min(RES0.5.3$mean.surv),
+    min(RES0.1.3$mean.surv),
+    min(RES0.2.3$mean.surv)
+  )
+
+  borne_max <- max(
+    max(RES0.5.3$mean.surv),
+    max(RES0.1.3$mean.surv),
+    max(RES0.2.3$mean.surv)
+  )
+
+  borne_min.c <- min(
+    min(RES0.5.3$mean.cure),
+    min(RES0.1.3$mean.cure),
+    min(RES0.2.3$mean.cure)
+  )
+
+  borne_max.c <- max(
+    max(RES0.5.3$mean.cure),
+    max(RES0.1.3$mean.cure),
+    max(RES0.2.3$mean.cure)
+  )
+
+  borne_min.b <- min(
+    min(RES0.5.3$mean.bernoulli),
+    min(RES0.1.3$mean.bernoulli),
+    min(RES0.2.3$mean.bernoulli)
+  )
+
+  borne_max.b <- max(
+    max(RES0.5.3$mean.bernoulli),
+    max(RES0.1.3$mean.bernoulli),
+    max(RES0.2.3$mean.bernoulli)
+  )
+
+  # Plot the data
+
+  gg1 <-  ggplot(RES0.2.3, aes(k, mean.bernoulli)) +
+    geom_line(aes(color = "0.2"), size = 0.6) +
+    geom_line(data = RES0.5.3, aes(k, mean.bernoulli, color = "0.5"), size = 0.6) +
+    geom_line(data = RES0.1.3, aes(k, mean.bernoulli, color = "0.1"), size = 0.6) +
+    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ylim(borne_min.b -0.1, borne_max.b+0.1)+
+    labs(
+      title = "Mod?le de Bernoulli",
+      x = expression(alpha),
+      y = "biais moyen",
+      color = expression(alpha))+
+    theme_bw()
+
+
+  gg2 <-  ggplot(RES0.2.3, aes(k, mean.surv)) +
+    geom_line(aes(color = "0.2"), size = 0.6) +
+    geom_line(data = RES0.5.3, aes(k, mean.surv, color = "0.5"), size = 0.6) +
+    geom_line(data = RES0.1.3, aes(k, mean.surv, color = "0.1"), size = 0.6) +
+    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ylim(borne_min -0.1, borne_max+0.1)+
+    labs(
+      title = "Mod?le de Survie",
+      x = expression(alpha),
+      y = "biais moyen",
+      color = expression(alpha))+
+    theme_bw()
+
+  gg3 <-  ggplot(RES0.2.3, aes(k, mean.cure)) +
+    geom_line(aes(color = "0.2"), size = 0.6) +
+    geom_line(data = RES0.5.3, aes(k, mean.cure, color = "0.5"), size = 0.6) +
+    geom_line(data = RES0.1.3, aes(k, mean.cure, color = "0.1"), size = 0.6) +
+    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ylim(borne_min.c -0.1, borne_max.c+0.1)+
+    labs(
+      title = "Mod?le de Gu?rison",
+      x = expression(alpha),
+      y = "biais moyen",
+      color = expression(alpha))+
+    theme_bw()
+  g <- grid.arrange(gg1, gg2, gg3, top = paste("influence de", expression(alpha)))
+
+  return(g)
+
+}
+biais.selon.lambda <-function(K, lambda, t_star,p, k){
+  results <- NULL
+
+  n <- 20
+  while(n<200){
+    vec.biais <- Simuler_biais_taillen(K, n, lambda, t_star, p, k)
+    biais.surv <- vec.biais$Modele_survie
+    biais.cure <- vec.biais$Modele_guerison
+    biais.bernoulli <- vec.biais$Modele_bernoulli
+    results <- rbind(results, c(n, mean(biais.surv) - p, mean(biais.cure) -p, mean(biais.bernoulli) -p ))
+    n <- n+20
+  }
+  return(results)
+}
+fonction_compar_plotsn_lambda<-function(N,window_lambda,t_star,p,k){
+  #' Plot des valeurs des biais moyens selon la taille des echantillons et du lambda.
+  #'
+  #' @param N nombre de tailles d'echantillon differents.
+  #' @param window_lambda
+  #' @param t_star fin de la fenetre d'observation
+  #'
+  #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
+  #' @export
+  #'
+  #' @examples
+  #' ######Test ######
+  #' t_star<-3
+  #' N<-10
+  #' window_lambda<-c(0.2,0.5,0.1)
+  #' result<-fonction_compar_plotsn_lambda(N,window_lambda,t_star)
+
+  set.seed(12345)
+  RES<- NULL
+  RES<- NSimulations.selon.n(N,window_lambda[1],t_star,k=k,p=p)
+  RES0.2.3<-data.frame(RES)
+  colnames( RES0.2.3)<- c("n","mean.bias")
+  set.seed(12345)
+  RES<- NULL
+  RES<- NSimulations.selon.n(N,window_lambda[2],t_star,k=k,p=p)
+  RES0.5.3<-data.frame(RES)
+  colnames( RES0.5.3)<- c("n","mean.bias")
+
+  set.seed(12345)
+  RES<- NULL
+  RES<- NSimulations.selon.n(N,window_lambda[3],t_star,k=k,p=p)
+  RES0.1.3<-data.frame(RES)
+  colnames( RES0.1.3)<- c("n","mean.bias")
+  borne_min<-min(min(RES0.5.3$mean.bias),min(RES0.1.3$mean.bias),min(RES0.2.3$mean.bias))
+  borne_max<-max(max(RES0.5.3$mean.bias),max(RES0.1.3$mean.bias),max(RES0.5.3$mean.bias))
+  plot(RES0.2.3$n,RES0.2.3$mean.bias,title=paste("Influence of n"),
+       ylim=c(-0.1+borne_min,borne_max+0.1),
+       type='b',bty="n",xlab="nbre sujets",ylab="biais moyen")
+  title("Influence de n et lambda")
+  lines(RES0.5.3$n,RES0.5.3$mean.bias,type="b",col="blue")
+  lines(RES0.1.3$n,RES0.1.3$mean.bias,type="b",col="red")
+  abline(h=0)
+  legend("topright",c("0.1","0.2","0.5"),col=c("red","black","blue"),lty=1,bty="n")
+}
+
+
+
+
+
+fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
+  library(gridExtra)
+  library(ggplot2)
+  # Generate the data
+  set.seed(12345)
+  RES <- biais.selon.lambda(K=N, lambda=window_lambda[1], t_star=t_star, p = p, k)
+  RES0.1.3 <- data.frame(RES)
+  colnames(RES0.1.3) <- c("n", "mean.surv", "mean.cure", "mean.bernoulli")
+
+  set.seed(12345)
+  RES <- biais.selon.lambda(K=N, lambda=window_lambda[2], t_star=t_star, p = p, k)
+  RES0.2.3 <- data.frame(RES)
+  colnames(RES0.2.3) <- c("n", "mean.surv", "mean.cure", "mean.bernoulli")
+
+  set.seed(12345)
+  RES <- biais.selon.lambda(K=N, lambda=window_lambda[3], t_star, p = p, k)
+  RES0.5.3 <- data.frame(RES)
+  colnames(RES0.5.3) <- c("n", "mean.surv", "mean.cure", "mean.bernoulli")
+
+  # Get the min and max bounds of each variable to be used in the plots
+  borne_min <- min(
+    min(RES0.5.3$mean.surv),
+    min(RES0.1.3$mean.surv),
+    min(RES0.2.3$mean.surv)
+  )
+
+  borne_max <- max(
+    max(RES0.5.3$mean.surv),
+    max(RES0.1.3$mean.surv),
+    max(RES0.2.3$mean.surv)
+  )
+
+  borne_min.c <- min(
+    min(RES0.5.3$mean.cure),
+    min(RES0.1.3$mean.cure),
+    min(RES0.2.3$mean.cure)
+  )
+
+  borne_max.c <- max(
+    max(RES0.5.3$mean.cure),
+    max(RES0.1.3$mean.cure),
+    max(RES0.2.3$mean.cure)
+  )
+
+  borne_min.b <- min(
+    min(RES0.5.3$mean.bernoulli),
+    min(RES0.1.3$mean.bernoulli),
+    min(RES0.2.3$mean.bernoulli)
+  )
+
+  borne_max.b <- max(
+    max(RES0.5.3$mean.bernoulli),
+    max(RES0.1.3$mean.bernoulli),
+    max(RES0.2.3$mean.bernoulli)
+  )
+
+  # Plot the data
+
+  gg1 <-  ggplot(RES0.2.3, aes(n, mean.bernoulli)) +
+    geom_line(aes(color = "0.2"), size = 0.6) +
+    geom_line(data = RES0.5.3, aes(n, mean.bernoulli, color = "0.5"), size = 0.6) +
+    geom_line(data = RES0.1.3, aes(n, mean.bernoulli, color = "0.1"), size = 0.6) +
+    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ylim(borne_min.b -0.1, borne_max.b+0.1)+
+    labs(
+      title = "Mod?le de Bernoulli",
+      x = "n",
+      y = "biais moyen",
+      color = "n" )+
+    theme_bw()
+  gg2 <-  ggplot(RES0.2.3, aes(n, mean.surv)) +
+    geom_line(aes(color = "0.2"), size = 0.6) +
+    geom_line(data = RES0.5.3, aes(n, mean.surv, color = "0.5"), size = 0.6) +
+    geom_line(data = RES0.1.3, aes(n, mean.surv, color = "0.1"), size = 0.6) +
+    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ylim(borne_min -0.1, borne_max+0.1)+
+    labs(
+      title = "Mod?le de Survie",
+      x = "n",
+      y = "biais moyen",
+      color = "n")+
+    theme_bw()
+
+  gg3 <-  ggplot(RES0.2.3, aes(n, mean.cure)) +
+    geom_line(aes(color = "0.2"), size = 0.6) +
+    geom_line(data = RES0.5.3, aes(n, mean.cure, color = "0.5"), size = 0.6) +
+    geom_line(data = RES0.1.3, aes(n, mean.cure, color = "0.1"), size = 0.6) +
+    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ylim(borne_min.c -0.1, borne_max.c+0.1)+
+    labs(
+      title = "Mod?le de Gu?rison",
+      x = "n",
+      y = "biais moyen",
+      color = "n")+
+    theme_bw()
+
+
+  g <- grid.arrange(gg1, gg2, gg3, top = "influence de n et lambda" )
+  return(g)
+
+}
+
+########## en fixant les param?tres.
+Calcul_biais_moyen_taillen<-function(K,n,lambda,t_star,p,k){
+  # on effectue la simulation des biais pour K ?chantillons de taille n selon
+  # les deux mod?les (de gu?rison, de survie)
+  data<-Simuler_biais_taillen(K,n,lambda,t_star,p,k)
+  # on va calculer le biais moyen. On pr?pare donc un vecteur pour stocker les
+  # deux biais moyens
+  result<-rep(NA,3)
+  #on calcule les biais moyens
+  result<-colMeans(data)
+  # Rappel : biais = estimateur - valeur th?orique
+  result[1]<-result[1]-p
+  result[2]<-result[2]-p
+  result[3]<-result[3]-p
+  return(result)
+}
+###########Evolution du biais#############
+
+
+biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
+  require(ggplot2)
+  require(gridExtra)
+  # On fixe un n de d?part ? 10 individus et on incr?ment par 5 jusqu'a 100
+  debut <- 20
+  fin <- 100
+  pas <- 5
+  n <- seq(debut,fin , pas)
+
+  # On calcule le biais pour K simulations et n-?chantillons
+  liste_parameter <- list(lambda, t_star, p, k)
+  names(liste_parameter)<-c("lambda","t_star","p","k")
+  result_final <- fonction_generation_taille_mean(vector_size = n, liste_parameter = liste_parameter, K=K)
+  result_final$n <- n
+
+  colnames(result_final) <- c("modele_bernoulli","modele_survie", "modele_guerison", "taille_echantillon")
+  # plot
+  borne_min <- min(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
+  borne_max <- max(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
+
+  borne_min <- min(result_final$modele_bernoulli, result_final$modele_guerison, result_final$modele_survie)
+  borne_max <- max(result_final$modele_bernoulli, result_final$modele_guerison, result_final$modele_survie)
+
+  gg1 <- ggplot(data = result_final, aes(x = taille_echantillon)) +
+    geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+    geom_smooth(aes(y = modele_bernoulli, col = "bernoulli"), size = 1.2, alpha = 0.5) +
+    scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "bernoulli" = "blue")) +
+    ggtitle("Evolution du biais en \nfonction de n") +
+    xlab("Taille echantillon") + ylab("Biais") +
+    theme_classic() +
+    theme(legend.title=element_blank(),
+          axis.text=element_text(family = "Helvetica", size=20),
+          axis.title=element_text(family = "Helvetica", size=20),
+          plot.title = element_text(family = "Helvetica", size = 24)
+          ,legend.text = element_text(size = 20)
+          # , legend.title = element_text(size = 22)
+          , plot.caption = element_text(size = 20)) +
+    ylim(borne_min, borne_max)
+
+  gg2 <- ggplot(data = result_final, aes(x = taille_echantillon)) +
+    geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+    geom_smooth(aes(y = modele_survie, col = "survie"), size = 1.2, alpha = 0.5) +
+    scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "survie" = "darkgreen")) +
+    ggtitle("Evolution du biais moyen en \n fonction de n") +
+    xlab("Taille echantillon") + ylab("Biais") +
+    theme_classic() +
+    theme(legend.title=element_blank(),
+          axis.text=element_text(family = "Helvetica", size=20),
+          axis.title=element_text(family = "Helvetica", size=20),
+          plot.title = element_text(family = "Helvetica", size = 24),
+          legend.text = element_text(size = 20)
+          # , legend.title = element_text(size = 22)
+          , plot.caption = element_text(size = 20)) +
+    ylim(borne_min, borne_max)+
+    labs(caption = sprintf("N = %s, p=%s,lambda=%s,alpha=%s" ,
+                           as.character(K),
+                           as.character(p),
+                           as.character(round(lambda,2)),
+                           as.character(alpha)))
+
+  gg <- grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7))
+
+}
+
+######### EQM ################
+eqm.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
+  require(ggplot2)
+  require(gridExtra)
+  # On fixe un n de d?part ? 10 individus et on incr?ment par 5 jusqu'a 100
+  debut <- 20
+  fin <- 100
+  pas <- 5
+  n <- seq(debut,fin , pas)
+
+  # On calcule le biais pour K simulations et n-?chantillons
+  liste_parameter <- list(lambda, t_star, p, k)
+  names(liste_parameter)<-c("lambda","t_star","p","k")
+  result_final <- fonction_generation_taille_eqm(vector_size = n, liste_parameter = liste_parameter, K=K)
+  result_final$n <- n
+  colnames(result_final) <- c("modele_bernoulli","modele_survie", "modele_guerison", "taille_echantillon")
+  # plot
+  borne_min <- min(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
+  borne_max <- max(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
+
+  # define color palette
+  palette <- c("#0072B2", "#D55E00", "#E69F00")
+
+  gg1 <- {ggplot(data = result_final, aes(x = taille_echantillon)) +
+      geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+      geom_smooth(aes(y = modele_bernoulli, col = "bernoulli"), size = 1.2, alpha = 0.5) +
+      scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "bernoulli" = "blue1")) +
+      xlab("Taille echantillon") + ylab("EQM") +
+      #theme_classic() +
+      theme(legend.title=element_blank(),
+            axis.text=element_text(family = "Helvetica", size=20),
+            axis.title=element_text(family = "Helvetica", size=20),
+            plot.title = element_text(family = "Helvetica", size = 24)
+            , legend.text = element_text(family = "Helvetica", size = 20)
+            ,text = element_text(size=rel(20))) +
+      ylim(borne_min, borne_max)}
+
+  gg2 <- {ggplot(data = result_final, aes(x = taille_echantillon)) +
+      geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+      geom_smooth(aes(y = modele_survie, col = "survie"), size = 1.2, alpha = 0.5) +
+      scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "survie" = "darkgreen")) +
+      xlab("Taille echantillon") + ylab("EQM") +
+      # theme_classic() +
+      theme(legend.title=element_blank(),
+            axis.text=element_text(family = "Helvetica", size=20),
+            axis.title=element_text(family = "Helvetica", size=20),
+            plot.title = element_text(family = "Helvetica", size = 24)
+            , legend.text = element_text(family = "Helvetica", size = 20)
+            ,text = element_text(size=rel(20))) +
+      ylim(borne_min, borne_max)+
+      labs(caption = sprintf("N = %s, p=%s,lambda=%s,alpha=%s" ,
+                             as.character(K),
+                             as.character(p),
+                             as.character(round(lambda,2)),
+                             as.character(alpha)))}
+
+  gg <- {grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7)
+                      ,top =textGrob("Evolution de l'EQM en fonction de la taille d'echantillon n",gp=gpar(fontsize=24,font=3)))}
+
+}
