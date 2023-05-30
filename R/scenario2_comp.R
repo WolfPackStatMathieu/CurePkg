@@ -80,9 +80,9 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
   return(data_returns)
 }
 ########## Biais #####
-#'Visualiser l'évolution du biais pour les trois modèles en fonction de la taille de l'échantillon pour la dose i.
+#'Visualiser l'évolution du biais pour les trois modèles en fonction de la taille de l'échantillon pour la dose i. Voir evol_biais_comp.
 #'
-#' @param results résultat de la fonction generation_comp_mean
+#' @param results Résultat pour chaque taille d'échantillon de la fonction generation_comp_mean.
 #' @param K nombre de répétition effectuées.
 #' @param i indice de la dose analysée.
 #' @param n nombre de tailles différentes considérées.
@@ -93,8 +93,6 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
 #'
 #' @examples
 #' ######Test ######
-#' Gmean<-
-#' biais_dosei<-evol_n_par_dose(results=Gmean,n=100,probabilite_a_priori=c(0.33,0.5),type1="increasing",type2="increasing",t_star=6,i=1)
 evol_n_par_dose<-function(results,n,i,K=K,type1,type2){
   longueur_resultats<-c(1:length(n))
   function_intermed<-function(x,results,i){
@@ -142,7 +140,6 @@ evol_n_par_dose<-function(results,n,i,K=K,type1,type2){
 ########## Biais #####
 #' Visualiser l'évolution du biais moyen en fonction de la taille de l'échantillon (de 20 à 100) pour toutes les doses.
 #'
-#' @param results résultat de la fonction generation_comp_mean
 #' @param K nombre de graines aléatoires considérées.
 #' @param grain_depart Graine aléatoire de départ.
 #' @param type1 type de fonction de risque pour l'évènement de la toxicité.
@@ -193,7 +190,7 @@ evol_eqm_comp<-function(K,probabilite_a_priori,t_star,type1,graine_depart,type2)
 }
 #'Visualiser l'évolution du biais pour les trois modèles en fonction de la taille de l'échantillon pour la dose i.
 #'
-#' @param results résultat de la fonction generation_comp_eqm
+#' @param results Résultat pour chaque taille d'échantillon de la fonction generation_comp_eqm.
 #' @param K nombre de répétition effectuées.
 #' @param i indice de la dose analysée.
 #' @param n nombre de tailles différentes considérées.
@@ -203,9 +200,6 @@ evol_eqm_comp<-function(K,probabilite_a_priori,t_star,type1,graine_depart,type2)
 #' @export
 #'
 #' @examples
-#' ######Test ######
-#' Geqm<-
-#' biais_dosei<-evol_n_par_dose_eqm(results=Geqm,K=100,type1="increasing",type2="increasing",t_star=6,i=1)
 evol_n_par_dose_eqm<-function(results,n,i,K=K,type1,type2){
   require(ggplot2)
   require(gridExtra)
