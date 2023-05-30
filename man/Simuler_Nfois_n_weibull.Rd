@@ -25,6 +25,7 @@ Generer N fois un echantillon de taille n et trouver le biais.
 }
 \examples{
 lambda_test<-1/3
+N<-20
 k<-3
 n<-100
 t_star<-6

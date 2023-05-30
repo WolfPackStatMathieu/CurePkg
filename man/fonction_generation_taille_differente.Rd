@@ -22,7 +22,7 @@ Permet de renvoyer le biais pour des tailles differentes.
 \examples{
 #################TEST EXP #####################
 vecteur_size<-sample(c(1:100),10)
-lamdba_test<-0.33
+lambda_test<-0.33
 t_star<-6
 liste_parameter<-list(lambda_test,t_star)
 names(liste_parameter)<-c("lambda","t_star")
