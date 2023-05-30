@@ -3,7 +3,7 @@
 #' Génére n fois le modèle
 #'
 #' @param vector_size : un vecteur de taille d'échantillon
-#' @param model : modèle bernouilli ou surv
+#' @param model : modèle bernouilli, surv ou weibull
 #' @param liste_parameter : liste des paramètres
 #' @param K : nombre de fois que l'on génère un échantillon de taille n
 #'
