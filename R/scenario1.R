@@ -41,6 +41,20 @@ Generation_un_ech<-function(n,lambda,t_star,p,k){
   df$is_observed<-ifelse(df$tox_time<t_star,1,0)
   return(df)
 }
+#' Calculer la proportion de censure.
+#'
+#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
+#' @param lambda : parametre de la loi weibull.
+#' @param t_star : Fin de la fenetre d'observation.
+#' @param k : paramètre de la loi weibull.
+#' @param p : proportion de non-guéris.
+#' @param N : nombre de répétitions de l'expérience.
+#' @return : Un violin_plot de la censure due au temps ou au fait d'être guéri.
+#' @export
+#'
+#' @examples
+#' ####test#####
+#' graph<-calcule_prop_censure(N=100,n=100,lambda=0.2,t_star=6,p=0.33,k=1)
 calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
   #initialisation du dataframe
   result_censures<- as.data.frame(matrix(NA, nrow = length(N), 3))
@@ -74,6 +88,19 @@ calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
 }
 
 #################Simulation en plusieurs fois.##########
+#'Calculer le biais des trois estimateurs pour un n-échantillon.
+#'
+#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
+#' @param lambda : parametre de la loi weibull.
+#' @param t_star : Fin de la fenetre d'observation.
+#' @param k : paramètre de la loi weibull.
+#' @param p : proportion réelle de non-guéris.
+#' @return : Un n-echantillon.
+#' @export
+#'
+#' @examples
+#' ####test#####
+#' liste_biais<-Simuler_biais_un_n_ech(n=100,lambda=2,t_tsar=6,p=0.33,k=1)
 Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
   database<-Generation_un_ech(n=n,lambda=lambda,t_star=t_star,p=p,k=k)
   estimateur_bern<-fonction_Bern(df=database)
@@ -84,6 +111,20 @@ Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
   names(liste_biais)<-c("Modele_bernoulli","Modele_survie","Modele_guerison")
   return(liste_biais)
 }
+#'Calculer le biais moyen des trois estimateurs pour un K n-échantillon.
+#'
+#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
+#' @param lambda : parametre de la loi weibull.
+#' @param t_star : Fin de la fenetre d'observation.
+#' @param k : paramètre de la loi weibull.
+#' @param p : proportion réelle de non-guéris.
+#' @param K : nombre de répétitions de l'expérience.
+#' @return : Un n-echantillon.
+#' @export
+#'
+#' @examples
+#' ####test#####
+#' liste_biais<-Simuler_biais_taillen(n=100,lambda=2,t_tsar=6,p=0.33,k=1,K=100)
 Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
   # Simuler_biais_un_n_ech retourne le biais du modele de guerison
   # et le biais du modele de survie
@@ -99,6 +140,19 @@ Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
 
 #############Biais##############
 ########influence des params.#####
+#'Calculer le biais moyen des trois estimateurs pour un K n-échantillon pour plusieurs valeurs de k.
+#'
+#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
+#' @param lambda : parametre de la loi weibull.
+#' @param t_star : Fin de la fenetre d'observation.
+#' @param p : proportion réelle de non-guéris.
+#' @param K : nombre de répétitions de l'expérience.
+#' @return : Un n-echantillon.
+#' @export
+#'
+#' @examples
+#' ####test#####
+#' liste_biais<-biais.selon.k(n=100,lambda=2,t_tsar=6,p=0.33,K=100)
 biais.selon.k <-function(K, n, lambda, t_star,p){
   k <- seq(0.8, 5, by = 0.1)
   results <- NULL
@@ -112,81 +166,22 @@ biais.selon.k <-function(K, n, lambda, t_star,p){
   }
   return(results)
 }
-fnct_compar_plt_biais.selon.k<-function(N, n, window_lambda,t_star,p){
-  #' Plot des valeurs des biais moyens selon la taille des echantillons et du lambda.
-  #'
-  #' @param N nombre de tailles d'echantillon differents.
-  #' @param window_lambda
-  #' @param t_star fin de la fenetre d'observation
-  #'
-  #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
-  #' @export
-  #'
-  #' @examples
-  #' ######Test ######
 
-
-  set.seed(12345)
-  RES<- NULL
-  RES<- biais.selon.k(N, n, window_lambda[1],t_star,p=p)
-  RES0.2.3<-data.frame(RES)
-
-  colnames( RES0.2.3)<- c("k","mean.surv", "mean.cure", "mean.bernoulli")
-  set.seed(12345)
-  RES<- NULL
-  RES<- biais.selon.k(N, n, window_lambda[2],t_star,p=p)
-  RES0.5.3<-data.frame(RES)
-  colnames( RES0.5.3)<- c("k","mean.surv", "mean.cure", "mean.bernoulli")
-
-  set.seed(12345)
-  RES<- NULL
-  RES<- biais.selon.k(N,n, window_lambda[3],t_star,p=p)
-  RES0.1.3<-data.frame(RES)
-  colnames( RES0.1.3)<- c("k","mean.surv", "mean.cure", "mean.bernoulli")
-
-
-  borne_min<-min(min(RES0.5.3$mean.surv),min(RES0.1.3$mean.surv),min(RES0.2.3$mean.surv))
-  borne_max<-max(max(RES0.5.3$mean.surv),max(RES0.1.3$mean.surv),max(RES0.5.3$mean.surv))
-
-  borne_min.c <- min(min(RES0.5.3$mean.cure),min(RES0.1.3$mean.cure),min(RES0.2.3$mean.cure))
-  borne_max.c <- max(max(RES0.5.3$mean.cure),max(RES0.1.3$mean.cure),max(RES0.5.3$mean.cure))
-
-  borne_min.b <- min(min(RES0.5.3$mean.bernoulli),min(RES0.1.3$mean.bernoulli),min(RES0.2.3$mean.bernoulli))
-  borne_max.b <- max(max(RES0.5.3$mean.bernoulli),max(RES0.1.3$mean.bernoulli),max(RES0.5.3$mean.bernoulli))
-
-  par(mfrow=c(2,2))
-  plot(RES0.2.3$k,RES0.2.3$mean.surv,main="Mod?le de survie",
-       ylim=c(-0.1+borne_min,borne_max+0.1),
-       type='b',xlab=expression(alpha),ylab="biais moyen")
-  lines(RES0.5.3$k,RES0.5.3$mean.surv,type="b",col="blue")
-  lines(RES0.1.3$k,RES0.1.3$mean.surv,type="b",col="red")
-  abline(h=0)
-
-
-  plot(RES0.2.3$k,RES0.2.3$mean.cure, main = "Mod?le de gu?rison",
-       ylim=c(-0.1+borne_min.c,borne_max.c+0.1),
-       type='b',xlab=expression(alpha),ylab="biais moyen")
-  lines(RES0.5.3$k,RES0.5.3$mean.cure,type="b",col="blue")
-  lines(RES0.1.3$k,RES0.1.3$mean.cure,type="b",col="red")
-  abline(h=0)
-
-  plot(RES0.2.3$k,RES0.2.3$mean.bernoulli,main="Mod?le de Bernoulli",
-       ylim=c(-0.1+borne_min.b,borne_max.b+0.1),
-       type='b',xlab=expression(alpha),ylab="biais moyen")
-  lines(RES0.5.3$k,RES0.5.3$mean.bernoulli,type="b",col="blue")
-  lines(RES0.1.3$k,RES0.1.3$mean.bernoulli,type="b",col="red")
-  abline(h=0)
-  legend("topright",
-         c("0.1","0.2","0.5"),
-         col=c("red","black","blue"),
-         lty=1)
-  plot.new()
-  legend("topright",
-         c("0.1","0.2","0.5"),
-         col=c("red","black","blue"),
-         lty=1)
-  mtext("Influence de alpha", side = 3, line = -24, outer = TRUE)
-}
+#' Ggplot des valeurs des biais moyens selon la taille des echantillons et du lambda.
+#'
+#' @param N  nombre de tailles d'echantillon differents.
+#' @param window_lambda  ensemble des valeurs de lambda considérées.
+#' @param t_star fin de la fenetre d'observation
+#' @param n nombre d'individus considérés.
+#' @param t_tsar fin de la fenêtre d'observation.
+#' @param
+#'
+#' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' plot<-fnct_compar_plt_biais.selon.k1(N=100,n=100,window_lambda=c(1,2,4),t_tsar=6,p=0.33)
 fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
   library(gridExtra)
   library(ggplot2)
@@ -289,6 +284,18 @@ fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
   return(g)
 
 }
+#' Evolution du biais en fonction de la taille de l'échantillon.
+#'
+#' @param K  nombre d'échantillons créées par taille d'échantillon.
+#' @param lambda  paramètre de la loi weibull.
+#' @param t_star fin de la fenetre d'observation
+#' @param p proportion de non-guéris.
+#' @return Dataframe. Pour chaque estimateur, valeur du biais moyen selon la taille de l'échantillon.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' df<-biais.selon.lambda(K=100,n=100,k=1,lambda=2,t_tsar=6,p=0.33)
 biais.selon.lambda <-function(K, lambda, t_star,p, k){
   results <- NULL
 
@@ -303,55 +310,24 @@ biais.selon.lambda <-function(K, lambda, t_star,p, k){
   }
   return(results)
 }
-fonction_compar_plotsn_lambda<-function(N,window_lambda,t_star,p,k){
-  #' Plot des valeurs des biais moyens selon la taille des echantillons et du lambda.
-  #'
-  #' @param N nombre de tailles d'echantillon differents.
-  #' @param window_lambda
-  #' @param t_star fin de la fenetre d'observation
-  #'
-  #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
-  #' @export
-  #'
-  #' @examples
-  #' ######Test ######
-  #' t_star<-3
-  #' N<-10
-  #' window_lambda<-c(0.2,0.5,0.1)
-  #' result<-fonction_compar_plotsn_lambda(N,window_lambda,t_star)
-
-  set.seed(12345)
-  RES<- NULL
-  RES<- NSimulations.selon.n(N,window_lambda[1],t_star,k=k,p=p)
-  RES0.2.3<-data.frame(RES)
-  colnames( RES0.2.3)<- c("n","mean.bias")
-  set.seed(12345)
-  RES<- NULL
-  RES<- NSimulations.selon.n(N,window_lambda[2],t_star,k=k,p=p)
-  RES0.5.3<-data.frame(RES)
-  colnames( RES0.5.3)<- c("n","mean.bias")
-
-  set.seed(12345)
-  RES<- NULL
-  RES<- NSimulations.selon.n(N,window_lambda[3],t_star,k=k,p=p)
-  RES0.1.3<-data.frame(RES)
-  colnames( RES0.1.3)<- c("n","mean.bias")
-  borne_min<-min(min(RES0.5.3$mean.bias),min(RES0.1.3$mean.bias),min(RES0.2.3$mean.bias))
-  borne_max<-max(max(RES0.5.3$mean.bias),max(RES0.1.3$mean.bias),max(RES0.5.3$mean.bias))
-  plot(RES0.2.3$n,RES0.2.3$mean.bias,title=paste("Influence of n"),
-       ylim=c(-0.1+borne_min,borne_max+0.1),
-       type='b',bty="n",xlab="nbre sujets",ylab="biais moyen")
-  title("Influence de n et lambda")
-  lines(RES0.5.3$n,RES0.5.3$mean.bias,type="b",col="blue")
-  lines(RES0.1.3$n,RES0.1.3$mean.bias,type="b",col="red")
-  abline(h=0)
-  legend("topright",c("0.1","0.2","0.5"),col=c("red","black","blue"),lty=1,bty="n")
-}
 
 
 
-
-
+#' Ggplot des valeurs des biais moyens selon la taille des echantillons et du lambda.
+#'
+#' @param N nombre de tailles d'echantillon differents.
+#' @param window_lambda
+#' @param t_star fin de la fenetre d'observation
+#'
+#' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' t_star<-3
+#' N<-10
+#' window_lambda<-c(0.2,0.5,0.1)
+#' result<-fonction_compar_plotsn_lambda1(N,window_lambda,t_star)
 fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
   library(gridExtra)
   library(ggplot2)
@@ -454,7 +430,22 @@ fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
 
 }
 
-########## en fixant les param?tres.
+########## en fixant les parametres.
+#' Calcul du biais moyen des trois estimateurs pour K n-échantillons.
+#'
+#' @param K nombre d'échantillons.
+#' @param lambda paramètre de la loi Weibull (scale).
+#' @param t_star fin de la fenetre d'observation
+#' @param k paramètre de la loi Weibull (shape).
+#' @return Liste. Valeur du biais moyen pour les trois estimateurs.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' t_star1<-6
+#' K<-10
+#' n<-100
+#' result<-Calcul_biais_moyen_taillen(K=K,n=n,t_star=t_star1,lambda=0.5,p=0.33,k=2)
 Calcul_biais_moyen_taillen<-function(K,n,lambda,t_star,p,k){
   # on effectue la simulation des biais pour K ?chantillons de taille n selon
   # les deux mod?les (de gu?rison, de survie)
@@ -471,8 +462,21 @@ Calcul_biais_moyen_taillen<-function(K,n,lambda,t_star,p,k){
   return(result)
 }
 ###########Evolution du biais#############
-
-
+#' Evolution du biais moyen des trois estimateurs pour K n-échantillons.
+#'
+#' @param K nombre d'échantillons.
+#' @param lambda paramètre de la loi Weibull (scale).
+#' @param t_star fin de la fenetre d'observation
+#' @param k paramètre de la loi Weibull (shape).
+#' @return Ggplot. Valeur du biais moyen pour les trois estimateurs pour n allant de 20 à 100.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' t_star1<-6
+#' K<-10
+#' n<-100
+#' result<-biais.selon.taille_echantillon(K=K,t_star=t_star1,lambda=0.5,p=0.33,k=2)
 biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
   require(ggplot2)
   require(gridExtra)
@@ -538,6 +542,21 @@ biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
 }
 
 ######### EQM ################
+#' Evolution de l'EQM moyen des trois estimateurs pour K n-échantillons.
+#'
+#' @param K nombre d'échantillons.
+#' @param lambda paramètre de la loi Weibull (scale).
+#' @param t_star fin de la fenetre d'observation
+#' @param k paramètre de la loi Weibull (shape).
+#' @return Ggplot. Valeur de l'eqm moyen pour les trois estimateurs pour n allant de 20 à 100.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' t_star1<-6
+#' K<-10
+#' n<-100
+#' result<-eqm.selon.taille_echantillon(K=K,t_star=t_star1,lambda=0.5,p=0.33,k=2)
 eqm.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
   require(ggplot2)
   require(gridExtra)

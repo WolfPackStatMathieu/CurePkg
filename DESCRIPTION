@@ -18,4 +18,6 @@ Imports:
     gridExtra,
     ggplot2,
     survival,
-    survminer
+    survminer,
+    cuRe, 
+    flexsurvcure

@@ -1,4 +1,28 @@
-######## premi?re m?thode de g?n?ration ########
+######## premiere methode de generation ########
+#' Calcul du biais pour chaque dose pour chaque estimateur avec un seul échantillon.
+#'
+#' @param n nombre d'individus considérés.
+#' @param nb_doses Nombre de doses. Ce nombre correspond à la longueur de liste_params.
+#' @param liste_params liste contenant plusieurs sous-listes. Chaque sous-liste contient le lambda et le k de chaque dose.
+#' @param t_star fin de la fenetre d'observation
+#' @param k paramètre de la loi Weibull (shape).
+#' @return Ggplot. Valeur du biais moyen pour les trois estimateurs pour n allant de 20 à 100.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' K<-10
+#' n<-100
+#' k1<-1
+#' lambda1<-3
+#' sous_liste1<-list(k1,lambda1)
+#' names(sous_liste1)<-c("k","lambda")
+#' k2<-2
+#' lambda2<-0.5
+#' sous_liste2<-list(k2,lambda2)
+#' names(sous_liste2)<-c("k","lambda")
+#' ls<-list(sous_liste1,sous_liste2)
+#' result<-function_estim_doses(n=100,liste_params=ls,nb_doses=len(ls),t_star=6)
 function_estim_doses<-function(n,liste_params,nb_doses,t_star){
   require(dfcrm)
   df<-matrix(NA,n,4)
@@ -59,8 +83,32 @@ function_estim_doses<-function(n,liste_params,nb_doses,t_star){
 
   return(data_returns)
 }
+#' Calcul du biais pour chaque dose pour chaque estimateur pour K échantillons.
+#'
+#' @param n nombre d'individus considérés.
+#' @param K nombre d'échantillons générés.
+#' @param nb_doses Nombre de doses. Ce nombre correspond à la longueur de liste_params.
+#' @param liste_params liste contenant plusieurs sous-listes. Chaque sous-liste contient le lambda et le k de chaque dose.
+#' @param t_star fin de la fenetre d'observation
+#' @return Liste. Valeur du biais pour chaque échantillon pour chaque estimateur.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' K<-10
+#' n<-100
+#' k1<-1
+#' lambda1<-3
+#' sous_liste1<-list(k1,lambda1)
+#' names(sous_liste1)<-c("k","lambda")
+#' k2<-2
+#' lambda2<-0.5
+#' sous_liste2<-list(k2,lambda2)
+#' names(sous_liste2)<-c("k","lambda")
+#' ls<-list(sous_liste1,sous_liste2)
+#' biais_K<-Realisations_estim_cas_mult(K=K,n=n,liste_params=ls,nb_doses=2,t_star=6)
 Realisations_estim_cas_mult<-function(K,n,liste_params,nb_doses,t_star){
-  ### G?n?re la moyenne des estimateurs pour la taille n
+  ### Genere la moyenne des estimateurs pour la taille n
   result<-lapply(rep(n,K),function_estim_doses,liste_params=liste_params,nb_doses=nb_doses,t_star=t_star)
   matrice<-list(rep(NA,nb_doses))
   for(j in c(1:nb_doses)){
@@ -73,6 +121,30 @@ Realisations_estim_cas_mult<-function(K,n,liste_params,nb_doses,t_star){
     matrice[[j]]<-ensemble_obs_dosek}
   return(matrice)
 }
+#' Calcul de l'eqm pour chaque dose pour chaque estimateur pour K échantillons.
+#'
+#' @param size nombre d'individus considérés.
+#' @param K nombre d'échantillons générés.
+#' @param nb_doses Nombre de doses. Ce nombre correspond à la longueur de liste_params.
+#' @param liste_params liste contenant plusieurs sous-listes. Chaque sous-liste contient le lambda et le k de chaque dose.
+#' @param t_star fin de la fenetre d'observation
+#' @return Liste. Valeur du biais pour chaque échantillon pour chaque estimateur.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' K<-10
+#' n<-100
+#' k1<-1
+#' lambda1<-3
+#' sous_liste1<-list(k1,lambda1)
+#' names(sous_liste1)<-c("k","lambda")
+#' k2<-2
+#' lambda2<-0.5
+#' sous_liste2<-list(k2,lambda2)
+#' names(sous_liste2)<-c("k","lambda")
+#' ls<-list(sous_liste1,sous_liste2)
+#' eqm<-Realisations_estim_cas_mult(K=K,size=n,vecteur_param=ls,nb_doses=2,t_star=6)
 calcul_eqm_size_Ktimes<-function(size,vecteur_param,nb_doses,K,t_star){
 
   matrice_eqm_doses<-as.data.frame(matrix(NA,nb_doses,5))
