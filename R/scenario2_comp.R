@@ -199,7 +199,7 @@ evol_n_par_dose<-function(results,n,i,K=K,type1,type2){
 #' @examples
 #' ######Test ######
 #' t1<-"increasing"
-#' t2<-"increasing
+#' t2<-"increasing"
 #' biais<-evol_biais_comp(K=100,probabilite_a_priori=c(0.33,0.5),type1=t1,type2=t2,t_star=6)
 evol_biais_comp<-function(K,probabilite_a_priori,t_star,type1,type2,graine_depart){
   debut <- 20
@@ -225,9 +225,7 @@ evol_biais_comp<-function(K,probabilite_a_priori,t_star,type1,type2,graine_depar
 #'
 #' @examples
 #' ######Test ######
-#' t1<-"increasing"
-#' t2<-"increasing
-#' biais<-evol_eqm_comp(K=100,probabilite_a_priori=c(0.33,0.5),type1=t1,type2=t2,t_star=6)
+#' biais<-evol_eqm_comp(K=100,probabilite_a_priori=c(0.33,0.5),type1="increasing",type2="increasing",t_star=6)
 evol_eqm_comp<-function(K,probabilite_a_priori,t_star,type1,graine_depart,type2){
   debut <- 20
   fin <- 100
@@ -310,7 +308,6 @@ evol_n_par_dose_eqm<-function(results,n,i,K=K,type1,type2){
 }
 #'Calculer l'EQM pour chaque dose sur K n-échantillons.
 #'
-#' @param
 #' @param K nombre de graines considérées.
 #' @param i indice de la dose analysée.
 #' @param n taille de l'échantillon.

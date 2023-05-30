@@ -80,7 +80,7 @@ fonction_compar_plotsn_lambda<-function(N,window_lambda,t_star){
   #' Plot des valeurs des biais moyens selon la taille des echantillons et du lambda.
   #'
   #' @param N nombre de tailles d'echantillon differents.
-  #' @param window_lambda
+  #' @param window_lambda vecteur de valeurs pour lambda
   #' @param t_star fin de la fenetre d'observation
   #'
   #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.

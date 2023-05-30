@@ -13,6 +13,9 @@ fonction_biais_survie(n, lambda, t_star)
 
 \item{t_star}{fin de la fenêtre d'observation}
 }
+\value{
+Calcul du biais de la probabilite de toxicite estimee par la fonction simul_survie.
+}
 \description{
 Biais.
 }

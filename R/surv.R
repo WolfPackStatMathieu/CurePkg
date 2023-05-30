@@ -83,7 +83,7 @@ Simuler_Nfois_n_echantillons<-function(N,n,lambda,t_star){
 #' @param lambda paramètre d'échelle de la loi de weibull
 #' @param t_star fin de la fenêtre d'observation
 #'
-#' @return
+#' @return Calcul du biais de la probabilite de toxicite estimee par la fonction simul_survie.
 #' @export
 #'
 #' @examples
