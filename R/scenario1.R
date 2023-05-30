@@ -13,9 +13,9 @@
 #' ####test#####
 #' k<-2
 #' lambda<-0.2
-#' ech<-Generation_un_ech(n=n,lambda=lambda,t_star=6,p=0.33,k=2)
+#' ech<-Generation_un_ech(n=100,lambda=lambda,t_star=6,p=0.33,k=2)
 Generation_un_ech<-function(n,lambda,t_star,p,k){
-  vecteur_censure<-rbinom(n,1,p)
+  vecteur_censure<-stats::rbinom(n,1,p)
   vecteur_temp<-rep(NA,n) # cree un vecteur des temps associ?s
   # l'estimateur du modele de Bernoulli est la moyenne des 1 du vecteur_censure
   # on cree un dataframe qui acolle la DLT au vecteur_temps
@@ -56,6 +56,8 @@ Generation_un_ech<-function(n,lambda,t_star,p,k){
 #' ####test#####
 #' graph<-calcule_prop_censure(N=100,n=100,lambda=0.2,t_star=6,p=0.33,k=1)
 calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
+  require(dplyr)
+  require(ggplot2)
   #initialisation du dataframe
   result_censures<- as.data.frame(matrix(NA, nrow = length(N), 3))
   colnames(result_censures)<-c("prop_censure_totale", "prop_censure_gueris", "prop_censure_additionnelle")
@@ -74,14 +76,14 @@ calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
 
   # boxplot_plot_censures<-ggplot(result_censures) +
   violin_plot <- result_censures %>%
-    gather(key="Type_de_censure", value="Val") %>%
-    ggplot2::ggplot( aes(x=Type_de_censure, y=Val, fill=Type_de_censure) ) +
+    dplyr::gather(key="Type_de_censure", value="Val") %>%
+    ggplot2::ggplot( ggplot2::aes(x=Type_de_censure, y=Val, fill=Type_de_censure) ) +
     ggplot2::geom_violin() +
     ggplot2::ggtitle("Distribution des types de censure, modele de generation 1")+
-    ggplot2::ylab("Pourcentage de censure") + xlab("Type de censure")+
-    ggplot2::theme(axis.text=element_text(family = "Helvetica", size=18),
-          axis.title=element_text(family = "Helvetica", size=18),
-          plot.title = element_text(family = "Helvetica", size = 25)) +
+    ggplot2::ylab("Pourcentage de censure") + ggplot2::xlab("Type de censure")+
+    ggplot2::theme(axis.text=ggplot2::element_text(family = "Helvetica", size=18),
+          axis.title=ggplot2::element_text(family = "Helvetica", size=18),
+          plot.title = ggplot2::element_text(family = "Helvetica", size = 25)) +
     ggplot2::labs(caption = sprintf("N = %s, n = %s, lambda= %s,t_star= %s, p= %s, alpha= %s", as.character(N),as.character(n), as.character(lambda), as.character(t_star),as.character(p), as.character(k)))
   print(violin_plot)
   return(result_censures)
@@ -100,7 +102,7 @@ calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
 #'
 #' @examples
 #' ####test#####
-#' vecteur_estimateurs<-Simuler_biais_un_n_ech(n=100,lambda=2,t_tsar=6,p=0.33,k=1)
+#' vecteur_estimateurs<-Simuler_biais_un_n_ech(n=100,lambda=2,t_star=6,p=0.33,k=1)
 Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
   database<-Generation_un_ech(n=n,lambda=lambda,t_star=t_star,p=p,k=k)
   estimateur_bern<-fonction_Bern(df=database)
@@ -124,7 +126,7 @@ Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
 #'
 #' @examples
 #' ####test#####
-#' vecteur_estims<-Simuler_biais_taillen(n=100,lambda=2,t_tsar=6,p=0.33,k=1,K=100)
+#' vecteur_estims<-Simuler_biais_taillen(n=100,lambda=2,t_star=6,p=0.33,k=1,K=100)
 Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
   # Simuler_biais_un_n_ech retourne le biais du modele de guerison
   # et le biais du modele de survie
@@ -152,7 +154,7 @@ Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
 #'
 #' @examples
 #' ####test#####
-#' liste_biais<-biais.selon.k(n=100,lambda=2,t_tsar=6,p=0.33,K=100)
+#' liste_biais<-biais.selon.k(n=100,lambda=2,t_star=6,p=0.33,K=100)
 biais.selon.k <-function(K, n, lambda, t_star,p){
   k <- seq(0.8, 5, by = 0.1)
   results <- NULL
@@ -294,7 +296,7 @@ fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
 #'
 #' @examples
 #' ######Test ######
-#' df<-biais.selon.lambda(K=100,n=100,k=1,lambda=2,t_tsar=6,p=0.33)
+#' df<-biais.selon.lambda(K=100,k=1,lambda=2,t_star=6,p=0.33)
 biais.selon.lambda <-function(K, lambda, t_star,p, k){
   results <- NULL
 
@@ -501,42 +503,42 @@ biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
   borne_min <- min(result_final$modele_bernoulli, result_final$modele_guerison, result_final$modele_survie)
   borne_max <- max(result_final$modele_bernoulli, result_final$modele_guerison, result_final$modele_survie)
 
-  gg1 <- ggplot2::ggplot(data = result_final, aes(x = taille_echantillon)) +
-    ggplot2::geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
-    ggplot2::geom_smooth(aes(y = modele_bernoulli, col = "bernoulli"), size = 1.2, alpha = 0.5) +
+  gg1 <- ggplot2::ggplot(data = result_final, ggplot2::aes(x = taille_echantillon)) +
+    ggplot2::geom_smooth(ggplot2::aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+    ggplot2::geom_smooth(ggplot2::aes(y = modele_bernoulli, col = "bernoulli"), size = 1.2, alpha = 0.5) +
     ggplot2::scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "bernoulli" = "blue")) +
     ggplot2::ggtitle("Evolution du biais en \nfonction de n") +
     ggplot2::xlab("Taille echantillon") + ggplot2::ylab("Biais") +
     ggplot2::theme_classic() +
-    ggplot2::theme(legend.title=element_blank(),
-          axis.text=element_text(family = "Helvetica", size=20),
-          axis.title=element_text(family = "Helvetica", size=20),
-          plot.title = element_text(family = "Helvetica", size = 24)
-          ,legend.text = element_text(size = 20)
+    ggplot2::theme(legend.title=ggplot2::element_blank(),
+          axis.text=ggplot2::element_text(family = "Helvetica", size=20),
+          axis.title=ggplot2::element_text(family = "Helvetica", size=20),
+          plot.title = ggplot2::element_text(family = "Helvetica", size = 24)
+          ,legend.text = ggplot2::element_text(size = 20)
           # , legend.title = element_text(size = 22)
-          , plot.caption = element_text(size = 20)) +
+          , plot.caption = ggplot2::element_text(size = 20)) +
     ggplot2::ylim(borne_min, borne_max)
 
-  gg2 <- ggplot2::ggplot(data = result_final, aes(x = taille_echantillon)) +
-    ggplot2::geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
-    ggplot2::geom_smooth(aes(y = modele_survie, col = "survie"), size = 1.2, alpha = 0.5) +
+  gg2 <- ggplot2::ggplot(data = result_final, ggplot2::aes(x = taille_echantillon)) +
+    ggplot2::geom_smooth(ggplot2::aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+    ggplot2::geom_smooth(ggplot2::aes(y = modele_survie, col = "survie"), size = 1.2, alpha = 0.5) +
     ggplot2::scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "survie" = "darkgreen")) +
     ggplot2::ggtitle("Evolution du biais moyen en \n fonction de n") +
-    ggplot2::xlab("Taille echantillon") + ylab("Biais") +
+    ggplot2::xlab("Taille echantillon") + ggplot2::ylab("Biais") +
     ggplot2::theme_classic() +
-    ggplot2::theme(legend.title=element_blank(),
-          axis.text=element_text(family = "Helvetica", size=20),
-          axis.title=element_text(family = "Helvetica", size=20),
-          plot.title = element_text(family = "Helvetica", size = 24),
-          legend.text = element_text(size = 20)
+    ggplot2::theme(legend.title=ggplot2::element_blank(),
+          axis.text=ggplot2::element_text(family = "Helvetica", size=20),
+          axis.title=ggplot2::element_text(family = "Helvetica", size=20),
+          plot.title = ggplot2::element_text(family = "Helvetica", size = 24),
+          legend.text = ggplot2::element_text(size = 20)
           # , legend.title = element_text(size = 22)
-          , plot.caption = element_text(size = 20)) +
+          , plot.caption = ggplot2::element_text(size = 20)) +
     ggplot2::ylim(borne_min, borne_max)+
     ggplot2::labs(caption = sprintf("N = %s, p=%s,lambda=%s,alpha=%s" ,
                            as.character(K),
                            as.character(p),
                            as.character(round(lambda,2)),
-                           as.character(alpha)))
+                           as.character(k)))
 
   gg <- gridExtra::grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7))
 
@@ -586,12 +588,12 @@ eqm.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
       ggplot2::scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "bernoulli" = "blue1")) +
       ggplot2::xlab("Taille echantillon") + ggplot2::ylab("EQM") +
       #theme_classic() +
-      ggplot2::theme(legend.title=element_blank(),
-            axis.text=element_text(family = "Helvetica", size=20),
-            axis.title=element_text(family = "Helvetica", size=20),
-            plot.title = element_text(family = "Helvetica", size = 24)
-            , legend.text = element_text(family = "Helvetica", size = 20)
-            ,text = element_text(size=rel(20))) +
+      ggplot2::theme(legend.title=ggplot2::element_blank(),
+            axis.text=ggplot2::element_text(family = "Helvetica", size=20),
+            axis.title=ggplot2::element_text(family = "Helvetica", size=20),
+            plot.title = ggplot2::element_text(family = "Helvetica", size = 24)
+            , legend.text = ggplot2::element_text(family = "Helvetica", size = 20)
+            ,text = ggplot2::element_text(size=rel(20))) +
       ggplot2::ylim(borne_min, borne_max)}
 
   gg2 <- {ggplot2::ggplot(data = result_final, aes(x = taille_echantillon)) +
@@ -600,18 +602,18 @@ eqm.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
       ggplot2::scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "survie" = "darkgreen")) +
       ggplot2::xlab("Taille echantillon") + ggplot2::ylab("EQM") +
       # theme_classic() +
-      ggplot2::theme(legend.title=element_blank(),
-            axis.text=element_text(family = "Helvetica", size=20),
-            axis.title=element_text(family = "Helvetica", size=20),
-            plot.title = element_text(family = "Helvetica", size = 24)
-            , legend.text = element_text(family = "Helvetica", size = 20)
-            ,text = element_text(size=rel(20))) +
+      ggplot2::theme(legend.title=ggplot2::element_blank(),
+            axis.text=ggplot2::element_text(family = "Helvetica", size=20),
+            axis.title=ggplot2::element_text(family = "Helvetica", size=20),
+            plot.title = ggplot2::element_text(family = "Helvetica", size = 24)
+            , legend.text = ggplot2::element_text(family = "Helvetica", size = 20)
+            ,text = ggplot2::element_text(size=rel(20))) +
       ggplot2::ylim(borne_min, borne_max)+
       ggplot2::labs(caption = sprintf("N = %s, p=%s,lambda=%s,alpha=%s" ,
                              as.character(K),
                              as.character(p),
                              as.character(round(lambda,2)),
-                             as.character(alpha)))}
+                             as.character(k)))}
 
   gg <- {gridExtra::grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7)
                       ,top =textGrob("Evolution de l'EQM en fonction de la taille d'echantillon n",gp=gpar(fontsize=24,font=3)))}

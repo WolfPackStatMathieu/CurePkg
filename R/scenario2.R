@@ -14,12 +14,12 @@
 #' n<-100
 #' k1<-1
 #' lambda1<-3
-#' sous_liste1<-list(k1,lambda1)
-#' names(sous_liste1)<-c("k","lambda")
+#' sous_liste1<-list(k1,lambda1,0.33)
+#' names(sous_liste1)<-c("k","lambda","p")
 #' k2<-2
 #' lambda2<-0.5
-#' sous_liste2<-list(k2,lambda2)
-#' names(sous_liste2)<-c("k","lambda")
+#' sous_liste2<-list(k2,lambda2,0.5)
+#' names(sous_liste2)<-c("k","lambda","p")
 #' ls<-list(sous_liste1,sous_liste2)
 #' result<-function_estim_doses(n=100,liste_params=ls,nb_doses=len(ls),t_star=6)
 function_estim_doses<-function(n,liste_params,nb_doses,t_star){
@@ -38,13 +38,13 @@ function_estim_doses<-function(n,liste_params,nb_doses,t_star){
     data_returns[k,"estimateur_bernoulli"]<-fonction_Bern(df[index_dosek,])
     data_returns[k,"p"]<-sous_liste[["p"]]
   }
-  fonction_surv<-Surv(as.numeric(df$tox_time),event=df$is_observed)
+  fonction_surv<-survival::Surv(as.numeric(df$tox_time),event=df$is_observed)
   indice_cens<-which(df$is_observed==0)
   df$factdose<-as.factor(df$dose)
   if(length(indice_cens)==0){
 
     estimateur_surv<-rep(1,nb_doses)
-    Prob_whole_cure<-fit.cure.model(Surv(tox_time,is_observed) ~ factdose, formula.surv=list(~1,~factdose),data =df,dist="weibull",link="logit")
+    Prob_whole_cure<-cuRe::fit.cure.model(survival::Surv(tox_time,is_observed) ~ factdose, formula.surv=list(~1,~factdose),data =df,dist="weibull",link="logit")
     beta0<-as.numeric(Prob_whole_cure$coefs[1]$'1')[1]
     reste_beta<-as.numeric(Prob_whole_cure$coefs[1]$'1')[c(2:nb_doses)]
     coeffs<-beta0+c(0,reste_beta)
@@ -53,7 +53,7 @@ function_estim_doses<-function(n,liste_params,nb_doses,t_star){
   }
   if(length(indice_cens)==nrow(df)){
     estimateur_surv<-rep(0,nb_doses)
-    Prob_whole_cure<-fit.cure.model(Surv(tox_time,is_observed) ~ factdose,  formula.surv=list(~1,~factdose),data =df,dist="weibull",link="logit")
+    Prob_whole_cure<-cuRe::fit.cure.model(survival::Surv(tox_time,is_observed) ~ factdose,  formula.surv=list(~1,~factdose),data =df,dist="weibull",link="logit")
     beta0<-as.numeric(Prob_whole_cure$coefs[1]$'1')[1]
     reste_beta<-as.numeric(Prob_whole_cure$coefs[1]$'1')[c(2:nb_doses)]
     coeffs<-beta0+c(0,reste_beta)
@@ -62,8 +62,8 @@ function_estim_doses<-function(n,liste_params,nb_doses,t_star){
     data_returns[,c("estimateur_survie","estimateur_guerison")]<-c(estimateur_surv,estimateur_cure)
   }
   else{
-    fit_surv <- survfit(fonction_surv ~factdose, data = df)
-    Prob_whole_cure<-fit.cure.model(Surv(tox_time,is_observed) ~ factdose,  formula.surv=list(~1,~factdose),data =df,dist="weibull",link="logit")
+    fit_surv <- survival::survfit(fonction_surv ~factdose, data = df)
+    Prob_whole_cure<-cuRe::fit.cure.model(survival::Surv(tox_time,is_observed) ~ factdose,  formula.surv=list(~1,~factdose),data =df,dist="weibull",link="logit")
     beta0<-as.numeric(Prob_whole_cure$coefs[1]$'1')[1]
     reste_beta<-as.numeric(Prob_whole_cure$coefs[1]$'1')[c(2:nb_doses)]
     coeffs<-beta0+c(0,reste_beta)
@@ -98,12 +98,12 @@ function_estim_doses<-function(n,liste_params,nb_doses,t_star){
 #' n<-100
 #' k1<-1
 #' lambda1<-3
-#' sous_liste1<-list(k1,lambda1)
-#' names(sous_liste1)<-c("k","lambda")
+#' sous_liste1<-list(k1,lambda1,0.33)
+#' names(sous_liste1)<-c("k","lambda","p")
 #' k2<-2
 #' lambda2<-0.5
-#' sous_liste2<-list(k2,lambda2)
-#' names(sous_liste2)<-c("k","lambda")
+#' sous_liste2<-list(k2,lambda2,0.5)
+#' names(sous_liste2)<-c("k","lambda","p")
 #' ls<-list(sous_liste1,sous_liste2)
 #' biais_K<-Realisations_estim_cas_mult(K=K,n=n,liste_params=ls,nb_doses=2,t_star=6)
 Realisations_estim_cas_mult<-function(K,n,liste_params,nb_doses,t_star){
@@ -136,12 +136,12 @@ Realisations_estim_cas_mult<-function(K,n,liste_params,nb_doses,t_star){
 #' n<-100
 #' k1<-1
 #' lambda1<-3
-#' sous_liste1<-list(k1,lambda1)
-#' names(sous_liste1)<-c("k","lambda")
+#' sous_liste1<-list(k1,lambda1,0.33)
+#' names(sous_liste1)<-c("k","lambda","p")
 #' k2<-2
 #' lambda2<-0.5
-#' sous_liste2<-list(k2,lambda2)
-#' names(sous_liste2)<-c("k","lambda")
+#' sous_liste2<-list(k2,lambda2,0.5)
+#' names(sous_liste2)<-c("k","lambda","p")
 #' ls<-list(sous_liste1,sous_liste2)
 #' eqm<-Realisations_estim_cas_mult(K=K,size=n,vecteur_param=ls,nb_doses=2,t_star=6)
 calcul_eqm_size_Ktimes<-function(size,vecteur_param,nb_doses,K,t_star){

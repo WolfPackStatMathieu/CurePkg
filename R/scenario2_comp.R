@@ -35,7 +35,7 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
     data_returns[k,"estimateur_bernoulli"]<-fonction_Bern(df[index_dosek,])
     data_returns[k,"p"]<-p
   }
-  fonction_surv<-Surv(as.numeric(df$tox_time),event=df$is_observed)
+  fonction_surv<-survival::Surv(as.numeric(df$tox_time),event=df$is_observed)
   indice_cens<-which(df$is_observed==0)
   df$factdose<-as.factor(df$dose)
   if(length(indice_cens)==0){
@@ -45,7 +45,7 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
     #estimateur_cure<-1-Prob_whole_cure[,2]
     #Prob_whole_curefx<-result<-flexsurvcure(Surv(tox_time,is_observed)~factdose+0, data=df, dist="weibullPH",
     #  anc=list(scale=~factdose+0))
-    Prob_whole_cure<-fit.cure.model(Surv(tox_time,is_observed) ~ factdose,formula.surv=list(~1,~factdose),
+    Prob_whole_cure<-cuRe::fit.cure.model(survival::Surv(tox_time,is_observed) ~ factdose,formula.surv=list(~1,~factdose),
                                     data =df2,dist="weibull",link="logit")
     beta0<-as.numeric(Prob_whole_cure$coefs[1]$'1')[1]
     reste_beta<-as.numeric(Prob_whole_cure$coefs[1]$'1')[c(2,nb_doses)]
@@ -55,10 +55,10 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
   }
   else{
     # print("passé par là 2")
-    fit_surv <- survfit(fonction_surv ~factdose, data = df)
+    fit_surv <- survival::survfit(fonction_surv ~factdose, data = df)
     # print("passé par là 3")
     df2<-df[,c("dose","factdose","is_observed","tox_time")]
-    Prob_whole_cure<-fit.cure.model(Surv(tox_time,is_observed) ~ factdose, formula.surv=list(~1,~factdose),
+    Prob_whole_cure<-cuRe::fit.cure.model(survival::Surv(tox_time,is_observed) ~ factdose, formula.surv=list(~1,~factdose),
                                     data =df2,dist="weibull",link="logit")
     beta0<-as.numeric(Prob_whole_cure$coefs[1]$'1')[1]
     reste_beta<-as.numeric(Prob_whole_cure$coefs[1]$'1')[c(2:nb_doses)]
@@ -97,10 +97,10 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
 #' t_star <- 6
 #' n <- 18
 #' graine_depart <- 133
-#' type1 <- constant
-#' type2 <- constant
+#' type1 <- "constant"
+#' type2 <- "constant"
 #' probabilite_a_priori <- c(0,5,0.75,0.2, 0.3)
-#' generation_comp_mean(K,n,probabilite_a_priori,t_star,type1,type2,graine_depart)
+#' generation_comp_mean(K=K,n,probabilite_a_priori,t_star,type1,type2,graine_depart)
 #'
 
 generation_comp_mean<-function(K,n,probabilite_a_priori,t_star,type1,type2,graine_depart){

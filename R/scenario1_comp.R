@@ -22,8 +22,8 @@
 #' t_star <- 6
 #' nombre_obs <- 18
 #' graine <- 133
-#' type1 <- constant
-#' type2 <- constant
+#' type1 <- "constant"
+#' type2 <- "constant"
 #' generation_comp(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2)
 #'
 generation_comp<-function(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2){
@@ -61,8 +61,8 @@ generation_comp<-function(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2
 #' t_star <- 6
 #' N <- 1000
 #' n <- 18
-#' type1 <- constant
-#' type2 <- constant
+#' type1 <- "constant"
+#' type2 <- "constant"
 #' prop_censure_alt(N,p_cause1,n,type1,type2,t_star,graine=133)
 #'
 prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
@@ -182,8 +182,8 @@ fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
 #' t_star <- 6
 #' n <- 18
 #' N <- 1000
-#' type1 <- constant
-#' type2 <- constant
+#' type1 <- "constant"
+#' type2 <- "constant"
 #' Simuler_estim_mult_times(N,p_cause1,n,type1,type2,t_star,graine=133)
 #'
 Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
@@ -215,9 +215,9 @@ Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
 #' p_cause1 <- 0.5
 #' t_star <- 6
 #' K <- 1000
-#' type1 <- constant
-#' type2 <- constant
-#' biais.selon.lambda_alt(p_cause1,K, type1,type2,t_star,graine=133)
+#' type1 <- "constant"
+#' type2 <- "constant"
+#' biais.selon.lambda_alt(p_cause1=p_cause1,K=K, type1=type1,type2=type2,t_star=t_star,graine=133)
 #'
 biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
 
@@ -253,9 +253,9 @@ biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
 #' p_cause1 <- 0.5
 #' t_star <- 6
 #' K <- 1000
-#' type1 <- constant
-#' type2 <- constant
-#' eqm.selon.alpha(p_cause1,K,type1,type2,t_star,graine=133)
+#' type1 <- "constant"
+#' type2 <- "constant"
+#' eqm.selon.alpha(p_cause1=_cause1,K=K,type1=type1,type2=type2,t_star=t_star,graine=133)
 #'
 eqm.selon.alpha<-function(p_cause1,K,t_star,type1,type2,graine){
 
@@ -296,9 +296,9 @@ eqm.selon.alpha<-function(p_cause1,K,t_star,type1,type2,graine){
 #' p <- 0.3
 #' t_star <- 6
 #' N <- 1000
-#' type1 <- constant
-#' type2 <- constant
-#' fonction_ggplot_evol_biais_alt(N,t_star, p,type1,type2,graine=133)
+#' type1 <- "constant"
+#' type2 <- "constant"
+#' fonction_ggplot_evol_biais_alt(N=N,t_star=t_star, p=p,type1=type1,type2=type2,graine=133)
 #'
 fonction_ggplot_evol_biais_alt <- function(N,t_star, p,type1,type2,graine=133) {
 
@@ -372,10 +372,10 @@ fonction_ggplot_evol_biais_alt <- function(N,t_star, p,type1,type2,graine=133) {
 #' p <- 0.3
 #' t_star <- 6
 #' K <- 1000
-#' type1 <- constant
-#' type2 <- constant
+#' type1 <- "constant"
+#' type2 <- "constant"
 #' n <- 18
-#' plots_scenario_1_alt(K, n, t_star, p,type1,type2,graine=133)
+#' plots_scenario_1_alt(K=K, n=n, t_star=t_star, p=p,type1=type1,type2=type2,graine=133)
 #'
 plots_scenario_1_alt <- function(K, n, p,type1,t_star,type2,graine=133){
 
@@ -441,8 +441,8 @@ plots_scenario_1_alt <- function(K, n, p,type1,t_star,type2,graine=133){
 #' @examples
 #' t_star <- 6
 #' N <- 1000
-#' type1 <- constant
-#' type2 <- constant
+#' type1 <- "constant"
+#' type2 <- "constant"
 #' fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133)
 #'
 fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133) {
@@ -621,6 +621,7 @@ fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.
 #'
 #' @param K Nombre d'échantillon
 #' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
 #' @param p proportion de TDL
 #' @param graine graine fixée pour la reproduction
 #' @param t_star fin de la fenêtre d'observation
@@ -630,19 +631,19 @@ fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.
 #'
 #' @examples
 #' K <- 1000
-#' type1 <- constant
+#' type1 <- "constant"
 #' p <- 0.3
 #' graine <- 133
 #' t_star <- 6
-#' eqm.selon.taille_echantillon_alt(K, type1, p,graine,t_star)
+#' eqm.selon.taille_echantillon_alt(K=K, type1=type1, p=p,graine=graine,t_star=t_star,type2="constant")
 #'
-eqm.selon.taille_echantillon_alt<-function(K, type1, p,graine,t_star){
+eqm.selon.taille_echantillon_alt<-function(K, type1, p,graine,t_star,type2){
 
   require(ggplot2)
   require(gridExtra)
   # On fixe un n de d?part ? 10 individus et on incr?ment par 5 jusqu'a 100
   # On calcule le biais pour K simulations et n-?chantillons
-  result_final<-as.data.frame(eqm.selon.alpha(K=K, type1=type1, p_cause1=p,graine=graine,type2=type1,t_star=t_star))
+  result_final<-as.data.frame(eqm.selon.alpha(K=K, type1=type1, p_cause1=p,graine=graine,type2=type2,t_star=t_star))
   colnames(result_final) <- c("taille_echantillon","modele_survie","modele_guerison", "modele_bernoulli")
   # plot
   borne_min <- min(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
@@ -675,10 +676,11 @@ eqm.selon.taille_echantillon_alt<-function(K, type1, p,graine,t_star){
           plot.title = element_text(family = "Helvetica", size = 10)) +
     # ylim(borne_min, borne_max)+
     ylim(0.01, 0.03)+
-    labs(caption = sprintf("N = %s, p=%s,type=%s" ,
+    labs(caption = sprintf("N = %s, p=%s,type=%s,type2=%s" ,
                            as.character(K),
                            as.character(p),
-                           as.character(type1)))
+                           as.character(type1),
+                           as.character(type2)))
 
   gg <- grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7))
 }
