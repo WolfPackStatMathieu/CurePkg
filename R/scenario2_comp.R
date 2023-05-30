@@ -343,3 +343,51 @@ generation_comp_eqm<-function(K,n,probabilite_a_priori,t_star,type1,graine_depar
   }
   return(matrice)
 }
+
+
+#' Calculer le biais pour chaque dose pour une taille d'échantillon fixée
+#'
+#' @param K Nombre d'échantillon
+#' @param n taille d'échantillon
+#' @param probabilite_a_priori vecteur de probabilité à priori
+#' @param t_star fin de la fenêtre d'observation
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param graine_depart graine fixée pour la reproduction
+#'
+#' @return Biais pour chaque dose
+#' @export
+#'
+#' @examples
+#' t_star <- 6
+#' K <- 1000
+#' type1 <- constant
+#' type2 <- constant
+#' n <- 18
+#' graine_depart <- 133
+#' probabilite_a_priori <- c(0.3,0.58,0.75,0.45)
+#' generation_comp_mean(K,n,probabilite_a_priori,t_star,type1,type2,graine_depart)
+#'
+generation_comp_mean<-function(K,n,probabilite_a_priori,t_star,type1,type2,graine_depart){
+
+  require(ggplot2)
+  require(gridExtra)
+  graine_debut<-graine_depart+1
+  graine_fin<-graine_depart+K
+  ensemble_graine<-c(graine_depart:graine_fin)
+  result<-lapply(ensemble_graine,function_estim_doses_comp,n=n,probabilite_a_priori=probabilite_a_priori,t_star=t_star,type1=type1,type2=type2)
+  nb_doses<-length(probabilite_a_priori)
+  matrice<-as.data.frame(matrix(NA,nb_doses,5))
+  colnames(matrice)<-c("numero_dose","modele_bernoulli","modele_survie","modele_guerison","p")
+  matrice$numero_dose<-c(1:nb_doses)
+  for(j in c(1:nb_doses)){
+    ensemble_obs_dosek<-t(cbind.data.frame(sapply(result,function(x,indice){return(x[indice,])},indice=j)))
+    ensemble_obs_dosek<-as.data.frame(ensemble_obs_dosek)
+    ensemble_obs_dosek$estimateur_bernoulli<-as.numeric(ensemble_obs_dosek$estimateur_bernoulli)
+    ensemble_obs_dosek$estimateur_guerison<-as.numeric(ensemble_obs_dosek$estimateur_guerison)
+    ensemble_obs_dosek$estimateur_survie<-as.numeric(unlist(ensemble_obs_dosek$estimateur_survie))
+    ensemble_obs_dosek$p<-as.numeric(ensemble_obs_dosek$p)
+    matrice[j,c("modele_bernoulli","modele_survie","modele_guerison","p")]<-colMeans(ensemble_obs_dosek)
+  }
+  return(matrice)
+}
