@@ -1,5 +1,7 @@
-#Generation
-#source("estimateurs.R")
+# Generation
+# source("estimateurs.R")
+# source("fonctions_simulations_competition.R")
+# source("http://myweb.uiowa.edu/pbreheny/7210/f19/notes/fun.R")
 
 #' Générer un échantillon selon un modèle à risques compétitifs
 #'
@@ -17,7 +19,7 @@
 #' @examples
 #' p_cause1 <- 0.5
 #' p_cause2 <-1-p_cause1
-#' t_start <- 6
+#' t_star <- 6
 #' nombre_obs <- 18
 #' graine <- 133
 #' type1 <- constant
@@ -56,7 +58,7 @@ generation_comp<-function(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2
 #'
 #' @examples
 #' p_cause1 <- 0.5
-#' t_start <- 6
+#' t_star <- 6
 #' N <- 1000
 #' n <- 18
 #' type1 <- constant
@@ -132,7 +134,7 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
 #'
 #' @examples
 #' p_cause1 <- 0.5
-#' t_start <- 6
+#' t_star <- 6
 #' n <- 18
 #' type1 <- constant
 #' type2 <- constant
@@ -177,7 +179,7 @@ fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
 #'
 #' @examples
 #' p_cause1 <- 0.5
-#' t_start <- 6
+#' t_star <- 6
 #' n <- 18
 #' N <- 1000
 #' type1 <- constant
@@ -211,7 +213,7 @@ Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
 #'
 #' @examples
 #' p_cause1 <- 0.5
-#' t_start <- 6
+#' t_star <- 6
 #' K <- 1000
 #' type1 <- constant
 #' type2 <- constant
@@ -249,7 +251,7 @@ biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
 #'
 #' @examples
 #' p_cause1 <- 0.5
-#' t_start <- 6
+#' t_star <- 6
 #' K <- 1000
 #' type1 <- constant
 #' type2 <- constant
@@ -292,7 +294,7 @@ eqm.selon.alpha<-function(p_cause1,K,t_star,type1,type2,graine){
 #'
 #' @examples
 #' p <- 0.3
-#' t_start <- 6
+#' t_star <- 6
 #' N <- 1000
 #' type1 <- constant
 #' type2 <- constant
@@ -368,7 +370,7 @@ fonction_ggplot_evol_biais_alt <- function(N,t_star, p,type1,type2,graine=133) {
 #'
 #' @examples
 #' p <- 0.3
-#' t_start <- 6
+#' t_star <- 6
 #' K <- 1000
 #' type1 <- constant
 #' type2 <- constant
@@ -437,7 +439,7 @@ plots_scenario_1_alt <- function(K, n, p,type1,t_star,type2,graine=133){
 #' @export
 #'
 #' @examples
-#' t_start <- 6
+#' t_star <- 6
 #' N <- 1000
 #' type1 <- constant
 #' type2 <- constant
