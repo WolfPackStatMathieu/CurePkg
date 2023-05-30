@@ -6,6 +6,7 @@
 #' Calcule le biais à partir d'un vecteur de lambdas
 #'
 #' @param lambda_vec : vecteur de lambdas
+#' @param N Nombre d'échantillon
 #' @param list_params : liste de paramètres nécessaires (ici n : taille de l'échantillon, t_star : fenêtre d'obs)
 #'
 #' @return retourne un vecteur de biais
@@ -33,6 +34,7 @@ lambda_func <- function(lambda_vec, list_params,N){
 #' Génère le biais à partir d'un vecteur de probabilité p
 #'
 #' @param p_vec : vecteur de probabilités
+#' @param N Nombre d'échantillon
 #' @param n : taille de l'échantillon
 #'
 #' @return retourne un vecteur de biais

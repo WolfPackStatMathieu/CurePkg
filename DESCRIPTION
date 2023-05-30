@@ -20,4 +20,9 @@ Imports:
     survival,
     survminer,
     cuRe, 
-    flexsurvcure
+    flexsurvcure,
+    dfcrm,
+    dplyr,
+    npcure,
+    tidyr,
+    grid

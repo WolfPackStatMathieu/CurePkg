@@ -88,7 +88,6 @@ variance_bern_Ntimes_sizen<-function(N,n,p){
 #' Appliquer les fonctions variances (I) sur differentes tailles d'echantillons.
 #'
 #' @param K : nombre de fois ou on produit un echantillon.
-#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
 #' @param liste_parameter : liste contenant les parametres du modele.
 #' @param model : str correspondant au nom du modele (Exp, Weibull pour les modeles de survie et Bernoulli pour le modele de guerison).
 #' @param vector_size : vecteur compose des differentes tailles etudiees.

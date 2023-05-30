@@ -10,6 +10,8 @@ lambda_func(lambda_vec, list_params, N)
 \item{lambda_vec}{: vecteur de lambdas}
 
 \item{list_params}{: liste de paramètres nécessaires (ici n : taille de l'échantillon, t_star : fenêtre d'obs)}
+
+\item{N}{Nombre d'échantillon}
 }
 \value{
 retourne un vecteur de biais

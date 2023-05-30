@@ -10,6 +10,8 @@ pbinom_func(p_vec, n, N)
 \item{p_vec}{: vecteur de probabilités}
 
 \item{n}{: taille de l'échantillon}
+
+\item{N}{Nombre d'échantillon}
 }
 \value{
 retourne un vecteur de biais

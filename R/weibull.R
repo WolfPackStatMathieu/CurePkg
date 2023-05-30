@@ -54,10 +54,10 @@ simul_survie_weibull<-function(n,lambda,k,t_star){
 }
 #' Calculer le biais d'une Weibull k,lambda.
 #'
-#' @param n
-#' @param lambda
-#' @param k
-#' @param t_star
+#' @param n taille d'échantillon
+#' @param lambda paramètre d'échelle
+#' @param k paramètre de forme
+#' @param t_star fin de la fenêtre d'observation
 #'
 #' @return
 #' @export

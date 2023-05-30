@@ -327,7 +327,9 @@ biais.selon.lambda <-function(K, lambda, t_star,p, k){
 #' t_star<-3
 #' N<-10
 #' window_lambda<-c(0.2,0.5,0.1)
-#' result<-fonction_compar_plotsn_lambda1(N,window_lambda,t_star)
+#' p <- 0.3
+#' k <- 1
+#' result<-fonction_compar_plotsn_lambda1(N=N,window_lambda=window_lambda,t_star=t_star, p=p, k=k)
 fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
   library(gridExtra)
   library(ggplot2)

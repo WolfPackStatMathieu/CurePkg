@@ -7,7 +7,13 @@
 fonction_biais_survie_weibull(n, lambda, k, t_star)
 }
 \arguments{
-\item{t_star}{}
+\item{n}{taille d'échantillon}
+
+\item{lambda}{paramètre d'échelle}
+
+\item{k}{paramètre de forme}
+
+\item{t_star}{fin de la fenêtre d'observation}
 }
 \description{
 Calculer le biais d'une Weibull k,lambda.

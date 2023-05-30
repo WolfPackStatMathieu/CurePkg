@@ -12,8 +12,6 @@ fonction_generation_taille_mean(vector_size, liste_parameter, K)
 \item{liste_parameter}{: liste des paramètres}
 
 \item{K}{: nombre de fois que l'on génère un échantillon de taille n}
-
-\item{model}{: modèle bernouilli ou surv}
 }
 \value{
 : Génére n fois le modèle (bernouilli ou survie)

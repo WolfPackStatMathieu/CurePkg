@@ -7,7 +7,11 @@
 fonction_biais_survie(n, lambda, t_star)
 }
 \arguments{
-\item{t_star}{}
+\item{n}{taille d'échantillon}
+
+\item{lambda}{paramètre d'échelle de la loi de weibull}
+
+\item{t_star}{fin de la fenêtre d'observation}
 }
 \description{
 Biais.

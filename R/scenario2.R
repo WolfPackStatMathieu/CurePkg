@@ -5,7 +5,6 @@
 #' @param nb_doses Nombre de doses. Ce nombre correspond à la longueur de liste_params.
 #' @param liste_params liste contenant plusieurs sous-listes. Chaque sous-liste contient le lambda et le k de chaque dose.
 #' @param t_star fin de la fenetre d'observation
-#' @param k paramètre de la loi Weibull (shape).
 #' @return Ggplot. Valeur du biais moyen pour les trois estimateurs pour n allant de 20 à 100.
 #' @export
 #'

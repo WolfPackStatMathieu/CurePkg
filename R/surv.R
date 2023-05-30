@@ -79,9 +79,9 @@ Simuler_Nfois_n_echantillons<-function(N,n,lambda,t_star){
 }
 #' Biais.
 #'
-#' @param n
-#' @param lambda
-#' @param t_star
+#' @param n taille d'échantillon
+#' @param lambda paramètre d'échelle de la loi de weibull
+#' @param t_star fin de la fenêtre d'observation
 #'
 #' @return
 #' @export
