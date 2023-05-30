@@ -75,14 +75,14 @@ calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
   # boxplot_plot_censures<-ggplot(result_censures) +
   violin_plot <- result_censures %>%
     gather(key="Type_de_censure", value="Val") %>%
-    ggplot( aes(x=Type_de_censure, y=Val, fill=Type_de_censure) ) +
-    geom_violin() +
-    ggtitle("Distribution des types de censure, modele de generation 1")+
-    ylab("Pourcentage de censure") + xlab("Type de censure")+
-    theme(axis.text=element_text(family = "Helvetica", size=18),
+    ggplot2::ggplot( aes(x=Type_de_censure, y=Val, fill=Type_de_censure) ) +
+    ggplot2::geom_violin() +
+    ggplot2::ggtitle("Distribution des types de censure, modele de generation 1")+
+    ggplot2::ylab("Pourcentage de censure") + xlab("Type de censure")+
+    ggplot2::theme(axis.text=element_text(family = "Helvetica", size=18),
           axis.title=element_text(family = "Helvetica", size=18),
           plot.title = element_text(family = "Helvetica", size = 25)) +
-    labs(caption = sprintf("N = %s, n = %s, lambda= %s,t_star= %s, p= %s, alpha= %s", as.character(N),as.character(n), as.character(lambda), as.character(t_star),as.character(p), as.character(k)))
+    ggplot2::labs(caption = sprintf("N = %s, n = %s, lambda= %s,t_star= %s, p= %s, alpha= %s", as.character(N),as.character(n), as.character(lambda), as.character(t_star),as.character(p), as.character(k)))
   print(violin_plot)
   return(result_censures)
 }
@@ -239,13 +239,13 @@ fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
 
   # Plot the data
 
-  gg1 <-  ggplot(RES0.2.3, aes(k, mean.bernoulli)) +
-    geom_line(aes(color = "0.2"), size = 0.6) +
-    geom_line(data = RES0.5.3, aes(k, mean.bernoulli, color = "0.5"), size = 0.6) +
-    geom_line(data = RES0.1.3, aes(k, mean.bernoulli, color = "0.1"), size = 0.6) +
-    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
-    ylim(borne_min.b -0.1, borne_max.b+0.1)+
-    labs(
+  gg1 <-  ggplot2::ggplot(RES0.2.3, aes(k, mean.bernoulli)) +
+    ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, aes(k, mean.bernoulli, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, aes(k, mean.bernoulli, color = "0.1"), size = 0.6) +
+    ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ggplot2::ylim(borne_min.b -0.1, borne_max.b+0.1)+
+    ggplot2::labs(
       title = "Mod?le de Bernoulli",
       x = expression(alpha),
       y = "biais moyen",
@@ -253,32 +253,32 @@ fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
     theme_bw()
 
 
-  gg2 <-  ggplot(RES0.2.3, aes(k, mean.surv)) +
-    geom_line(aes(color = "0.2"), size = 0.6) +
-    geom_line(data = RES0.5.3, aes(k, mean.surv, color = "0.5"), size = 0.6) +
-    geom_line(data = RES0.1.3, aes(k, mean.surv, color = "0.1"), size = 0.6) +
-    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
-    ylim(borne_min -0.1, borne_max+0.1)+
-    labs(
+  gg2 <-  ggplot2::ggplot(RES0.2.3, aes(k, mean.surv)) +
+    ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, aes(k, mean.surv, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, aes(k, mean.surv, color = "0.1"), size = 0.6) +
+    ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ggplot2::ylim(borne_min -0.1, borne_max+0.1)+
+    ggplot2::labs(
       title = "Mod?le de Survie",
       x = expression(alpha),
       y = "biais moyen",
       color = expression(alpha))+
-    theme_bw()
+    ggplot2::theme_bw()
 
-  gg3 <-  ggplot(RES0.2.3, aes(k, mean.cure)) +
-    geom_line(aes(color = "0.2"), size = 0.6) +
-    geom_line(data = RES0.5.3, aes(k, mean.cure, color = "0.5"), size = 0.6) +
-    geom_line(data = RES0.1.3, aes(k, mean.cure, color = "0.1"), size = 0.6) +
-    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
-    ylim(borne_min.c -0.1, borne_max.c+0.1)+
-    labs(
+  gg3 <-  ggplot2::ggplot(RES0.2.3, aes(k, mean.cure)) +
+    ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, aes(k, mean.cure, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, aes(k, mean.cure, color = "0.1"), size = 0.6) +
+    ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ggplot2::ylim(borne_min.c -0.1, borne_max.c+0.1)+
+    ggplot2::labs(
       title = "Mod?le de Gu?rison",
       x = expression(alpha),
       y = "biais moyen",
       color = expression(alpha))+
-    theme_bw()
-  g <- grid.arrange(gg1, gg2, gg3, top = paste("influence de", expression(alpha)))
+    ggplot2::theme_bw()
+  g <- gridExtra::grid.arrange(gg1, gg2, gg3, top = paste("influence de", expression(alpha)))
 
   return(g)
 
@@ -387,46 +387,46 @@ fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
 
   # Plot the data
 
-  gg1 <-  ggplot(RES0.2.3, aes(n, mean.bernoulli)) +
-    geom_line(aes(color = "0.2"), size = 0.6) +
-    geom_line(data = RES0.5.3, aes(n, mean.bernoulli, color = "0.5"), size = 0.6) +
-    geom_line(data = RES0.1.3, aes(n, mean.bernoulli, color = "0.1"), size = 0.6) +
-    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
-    ylim(borne_min.b -0.1, borne_max.b+0.1)+
-    labs(
+  gg1 <-  ggplot2::ggplot(RES0.2.3, aes(n, mean.bernoulli)) +
+    ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, aes(n, mean.bernoulli, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, aes(n, mean.bernoulli, color = "0.1"), size = 0.6) +
+    ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ggplot2::ylim(borne_min.b -0.1, borne_max.b+0.1)+
+    ggplot2::labs(
       title = "Mod?le de Bernoulli",
       x = "n",
       y = "biais moyen",
       color = "n" )+
-    theme_bw()
-  gg2 <-  ggplot(RES0.2.3, aes(n, mean.surv)) +
-    geom_line(aes(color = "0.2"), size = 0.6) +
-    geom_line(data = RES0.5.3, aes(n, mean.surv, color = "0.5"), size = 0.6) +
-    geom_line(data = RES0.1.3, aes(n, mean.surv, color = "0.1"), size = 0.6) +
-    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
-    ylim(borne_min -0.1, borne_max+0.1)+
-    labs(
+    ggplot2::theme_bw()
+  gg2 <-  ggplot2::ggplot(RES0.2.3, aes(n, mean.surv)) +
+    ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, aes(n, mean.surv, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, aes(n, mean.surv, color = "0.1"), size = 0.6) +
+    ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ggplot2::ylim(borne_min -0.1, borne_max+0.1)+
+    ggplot2::labs(
       title = "Mod?le de Survie",
       x = "n",
       y = "biais moyen",
       color = "n")+
-    theme_bw()
+    ggplot2::theme_bw()
 
-  gg3 <-  ggplot(RES0.2.3, aes(n, mean.cure)) +
-    geom_line(aes(color = "0.2"), size = 0.6) +
-    geom_line(data = RES0.5.3, aes(n, mean.cure, color = "0.5"), size = 0.6) +
-    geom_line(data = RES0.1.3, aes(n, mean.cure, color = "0.1"), size = 0.6) +
-    scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
-    ylim(borne_min.c -0.1, borne_max.c+0.1)+
-    labs(
+  gg3 <-  ggplot2::ggplot(RES0.2.3, aes(n, mean.cure)) +
+    ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, aes(n, mean.cure, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, aes(n, mean.cure, color = "0.1"), size = 0.6) +
+    ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
+    ggplot2::ylim(borne_min.c -0.1, borne_max.c+0.1)+
+    ggplot2::labs(
       title = "Mod?le de Gu?rison",
       x = "n",
       y = "biais moyen",
       color = "n")+
-    theme_bw()
+    ggplot2::theme_bw()
 
 
-  g <- grid.arrange(gg1, gg2, gg3, top = "influence de n et lambda" )
+  g <- gridExtra::grid.arrange(gg1, gg2, gg3, top = "influence de n et lambda" )
   return(g)
 
 }
@@ -501,44 +501,44 @@ biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
   borne_min <- min(result_final$modele_bernoulli, result_final$modele_guerison, result_final$modele_survie)
   borne_max <- max(result_final$modele_bernoulli, result_final$modele_guerison, result_final$modele_survie)
 
-  gg1 <- ggplot(data = result_final, aes(x = taille_echantillon)) +
-    geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
-    geom_smooth(aes(y = modele_bernoulli, col = "bernoulli"), size = 1.2, alpha = 0.5) +
-    scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "bernoulli" = "blue")) +
-    ggtitle("Evolution du biais en \nfonction de n") +
-    xlab("Taille echantillon") + ylab("Biais") +
-    theme_classic() +
-    theme(legend.title=element_blank(),
+  gg1 <- ggplot2::ggplot(data = result_final, aes(x = taille_echantillon)) +
+    ggplot2::geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+    ggplot2::geom_smooth(aes(y = modele_bernoulli, col = "bernoulli"), size = 1.2, alpha = 0.5) +
+    ggplot2::scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "bernoulli" = "blue")) +
+    ggplot2::ggtitle("Evolution du biais en \nfonction de n") +
+    ggplot2::xlab("Taille echantillon") + ggplot2::ylab("Biais") +
+    ggplot2::theme_classic() +
+    ggplot2::theme(legend.title=element_blank(),
           axis.text=element_text(family = "Helvetica", size=20),
           axis.title=element_text(family = "Helvetica", size=20),
           plot.title = element_text(family = "Helvetica", size = 24)
           ,legend.text = element_text(size = 20)
           # , legend.title = element_text(size = 22)
           , plot.caption = element_text(size = 20)) +
-    ylim(borne_min, borne_max)
+    ggplot2::ylim(borne_min, borne_max)
 
-  gg2 <- ggplot(data = result_final, aes(x = taille_echantillon)) +
-    geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
-    geom_smooth(aes(y = modele_survie, col = "survie"), size = 1.2, alpha = 0.5) +
-    scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "survie" = "darkgreen")) +
-    ggtitle("Evolution du biais moyen en \n fonction de n") +
-    xlab("Taille echantillon") + ylab("Biais") +
-    theme_classic() +
-    theme(legend.title=element_blank(),
+  gg2 <- ggplot2::ggplot(data = result_final, aes(x = taille_echantillon)) +
+    ggplot2::geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+    ggplot2::geom_smooth(aes(y = modele_survie, col = "survie"), size = 1.2, alpha = 0.5) +
+    ggplot2::scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "survie" = "darkgreen")) +
+    ggplot2::ggtitle("Evolution du biais moyen en \n fonction de n") +
+    ggplot2::xlab("Taille echantillon") + ylab("Biais") +
+    ggplot2::theme_classic() +
+    ggplot2::theme(legend.title=element_blank(),
           axis.text=element_text(family = "Helvetica", size=20),
           axis.title=element_text(family = "Helvetica", size=20),
           plot.title = element_text(family = "Helvetica", size = 24),
           legend.text = element_text(size = 20)
           # , legend.title = element_text(size = 22)
           , plot.caption = element_text(size = 20)) +
-    ylim(borne_min, borne_max)+
-    labs(caption = sprintf("N = %s, p=%s,lambda=%s,alpha=%s" ,
+    ggplot2::ylim(borne_min, borne_max)+
+    ggplot2::labs(caption = sprintf("N = %s, p=%s,lambda=%s,alpha=%s" ,
                            as.character(K),
                            as.character(p),
                            as.character(round(lambda,2)),
                            as.character(alpha)))
 
-  gg <- grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7))
+  gg <- gridExtra::grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7))
 
 }
 
@@ -580,40 +580,40 @@ eqm.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
   # define color palette
   palette <- c("#0072B2", "#D55E00", "#E69F00")
 
-  gg1 <- {ggplot(data = result_final, aes(x = taille_echantillon)) +
-      geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
-      geom_smooth(aes(y = modele_bernoulli, col = "bernoulli"), size = 1.2, alpha = 0.5) +
-      scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "bernoulli" = "blue1")) +
-      xlab("Taille echantillon") + ylab("EQM") +
+  gg1 <- {ggplot2::ggplot(data = result_final, aes(x = taille_echantillon)) +
+      ggplot2::geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+      ggplot2::geom_smooth(aes(y = modele_bernoulli, col = "bernoulli"), size = 1.2, alpha = 0.5) +
+      ggplot2::scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "bernoulli" = "blue1")) +
+      ggplot2::xlab("Taille echantillon") + ggplot2::ylab("EQM") +
       #theme_classic() +
-      theme(legend.title=element_blank(),
+      ggplot2::theme(legend.title=element_blank(),
             axis.text=element_text(family = "Helvetica", size=20),
             axis.title=element_text(family = "Helvetica", size=20),
             plot.title = element_text(family = "Helvetica", size = 24)
             , legend.text = element_text(family = "Helvetica", size = 20)
             ,text = element_text(size=rel(20))) +
-      ylim(borne_min, borne_max)}
+      ggplot2::ylim(borne_min, borne_max)}
 
-  gg2 <- {ggplot(data = result_final, aes(x = taille_echantillon)) +
-      geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
-      geom_smooth(aes(y = modele_survie, col = "survie"), size = 1.2, alpha = 0.5) +
-      scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "survie" = "darkgreen")) +
-      xlab("Taille echantillon") + ylab("EQM") +
+  gg2 <- {ggplot2::ggplot(data = result_final, aes(x = taille_echantillon)) +
+      ggplot2::geom_smooth(aes(y = modele_guerison, col = "guerison"), size = 1.2, alpha = 0.5) +
+      ggplot2::geom_smooth(aes(y = modele_survie, col = "survie"), size = 1.2, alpha = 0.5) +
+      ggplot2::scale_color_manual(name = "Modeles", values = c("guerison" = "red1", "survie" = "darkgreen")) +
+      ggplot2::xlab("Taille echantillon") + ggplot2::ylab("EQM") +
       # theme_classic() +
-      theme(legend.title=element_blank(),
+      ggplot2::theme(legend.title=element_blank(),
             axis.text=element_text(family = "Helvetica", size=20),
             axis.title=element_text(family = "Helvetica", size=20),
             plot.title = element_text(family = "Helvetica", size = 24)
             , legend.text = element_text(family = "Helvetica", size = 20)
             ,text = element_text(size=rel(20))) +
-      ylim(borne_min, borne_max)+
-      labs(caption = sprintf("N = %s, p=%s,lambda=%s,alpha=%s" ,
+      ggplot2::ylim(borne_min, borne_max)+
+      ggplot2::labs(caption = sprintf("N = %s, p=%s,lambda=%s,alpha=%s" ,
                              as.character(K),
                              as.character(p),
                              as.character(round(lambda,2)),
                              as.character(alpha)))}
 
-  gg <- {grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7)
+  gg <- {gridExtra::grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7)
                       ,top =textGrob("Evolution de l'EQM en fonction de la taille d'echantillon n",gp=gpar(fontsize=24,font=3)))}
 
 }
