@@ -41,6 +41,20 @@ Generation_un_ech<-function(n,lambda,t_star,p,k){
   df$is_observed<-ifelse(df$tox_time<t_star,1,0)
   return(df)
 }
+#' Calculer la proportion de censure.
+#'
+#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
+#' @param lambda : parametre de la loi weibull.
+#' @param t_star : Fin de la fenetre d'observation.
+#' @param k : paramètre de la loi weibull.
+#' @param p : proportion de non-guéris.
+#' @param N : nombre de répétitions de l'expérience.
+#' @return : Un violin_plot de la censure due au temps ou au fait d'être guéri.
+#' @export
+#'
+#' @examples
+#' ####test#####
+#' graph<-calcule_prop_censure(N=100,n=100,lambda=0.2,t_star=6,p=0.33,k=1)
 calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
   #initialisation du dataframe
   result_censures<- as.data.frame(matrix(NA, nrow = length(N), 3))
@@ -74,6 +88,19 @@ calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
 }
 
 #################Simulation en plusieurs fois.##########
+#'Calculer le biais des trois estimateurs pour un n-échantillon.
+#'
+#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
+#' @param lambda : parametre de la loi weibull.
+#' @param t_star : Fin de la fenetre d'observation.
+#' @param k : paramètre de la loi weibull.
+#' @param p : proportion réelle de non-guéris.
+#' @return : Un n-echantillon.
+#' @export
+#'
+#' @examples
+#' ####test#####
+#' liste_biais<-Simuler_biais_un_n_ech(n=100,lambda=2,t_tsar=6,p=0.33,k=1)
 Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
   database<-Generation_un_ech(n=n,lambda=lambda,t_star=t_star,p=p,k=k)
   estimateur_bern<-fonction_Bern(df=database)
@@ -84,6 +111,20 @@ Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
   names(liste_biais)<-c("Modele_bernoulli","Modele_survie","Modele_guerison")
   return(liste_biais)
 }
+#'Calculer le biais moyen des trois estimateurs pour un K n-échantillon.
+#'
+#' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
+#' @param lambda : parametre de la loi weibull.
+#' @param t_star : Fin de la fenetre d'observation.
+#' @param k : paramètre de la loi weibull.
+#' @param p : proportion réelle de non-guéris.
+#' @param K : nombre de répétitions de l'expérience.
+#' @return : Un n-echantillon.
+#' @export
+#'
+#' @examples
+#' ####test#####
+#' liste_biais<-Simuler_biais_taillen(n=100,lambda=2,t_tsar=6,p=0.33,k=1,K=100)
 Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
   # Simuler_biais_un_n_ech retourne le biais du modele de guerison
   # et le biais du modele de survie
