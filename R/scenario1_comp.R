@@ -1,6 +1,31 @@
-#Generation#
+#Generation
 #source("estimateurs.R")
+
+#' Générer un échantillon selon un modèle à risques compétitifs
+#'
+#' @param p_cause1 probabilité pour la cause 1 à t_star
+#' @param p_cause2 probabilité pour la cause 1 à t_star
+#' @param t_star fin de la fenêtre d'observation
+#' @param nombre_obs taille d'échantillon
+#' @param graine graine fixée pour la reproduction
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#'
+#' @return un dataframe avec le statut, temps de toxicité et observation de toxicité des patients
+#' @export
+#'
+#' @examples
+#' p_cause1 <- 0.5
+#' p_cause2 <-1-p_cause1
+#' t_start <- 6
+#' nombre_obs <- 18
+#' graine <- 133
+#' type1 <- constant
+#' type2 <- constant
+#' generation_comp(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2)
+#'
 generation_comp<-function(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2){
+
   alpha1<-get_alpha(p_cause1,obswin=t_star,typ="weibull",typ_wb=type1)
   alpha2<-get_alpha(p_cause2,obswin=t_star,typ="weibull",typ_wb=type2)
   liste_dataset<-get_dataset0(n=nombre_obs,alpha1,alpha2,tstar=t_star,graine=graine,K=1,type="weibull")
@@ -11,8 +36,33 @@ generation_comp<-function(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2
   colnames(data_estim)<-c("status","tox_time","is_observed")
   return(data_estim)
 }
-######### Estimateurs.#####
-#### Rien#####
+
+
+# Estimateurs.
+
+#' Générer un graphique de la proportion de censures dans les échantillons selon le modèle
+#' à risques compétitifs
+#'
+#' @param N nombre d'échantillon
+#' @param p_cause1 probabilité pour la cause 1 à t_star
+#' @param n taille d'échantillon
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param t_star fin de la fenêtre d'observation
+#' @param graine graine fixée pour la reproduction
+#'
+#' @return Graphique de la proportion de censures
+#' @export
+#'
+#' @examples
+#' p_cause1 <- 0.5
+#' t_start <- 6
+#' N <- 1000
+#' n <- 18
+#' type1 <- constant
+#' type2 <- constant
+#' prop_censure_alt(N,p_cause1,n,type1,type2,t_star,graine=133)
+#'
 prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
 
   p <- 33
@@ -27,7 +77,7 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
     df <- generation_comp(p_cause1=p_cause1, p_cause2=p_cause2,
                           t_star=t_star,nombre_obs=n,
                           type1=type1,type2=type2,graine=graine+i)
-    print(df)
+
 
     res[[i]] <- df
     nb_status0 <- length(which(df$status==0))
@@ -35,8 +85,8 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
     nb_status2 <- length(which(df$status==2))
 
     censures[i] <- (nb_status0/n)*100     # censures
-    TDL[i] <- (nb_status1/n)*100    # non gu?ris (toxicit?)
-    gueris[i] <- (nb_status2/n)*100    # gu?ris
+    TDL[i] <- (nb_status1/n)*100    # non guéris (toxicit?)
+    gueris[i] <- (nb_status2/n)*100    # guéris
   }
   # censures_mean <- mean(censures)
   # TDL_mean <- mean(TDL)
@@ -58,7 +108,7 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
          lwd = c(2, 2),
          bty ="n",
          cex = 0.6) # Line widths
-  plot(x=dens_censure$x, y=dens_censure$y, main="Censures", type="l", xlab="censure", ylab="densit?")
+  plot(x=dens_censure$x, y=dens_censure$y, main="Censures", type="l", xlab="censure", ylab="densité")
   # M <- cbind(TDL, censures)
   # dnplot(M[,1])
   # dnplot(M[,1], pos=TRUE)
@@ -68,7 +118,28 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
 
 }
 
+#' Calculer le biais des 3 estimateurs une fois selon le modèle à risques compétitifs
+#'
+#' @param p_cause1 probabilité pour la cause 1 à t_star
+#' @param n taille d'échantillon
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param t_star fin de la fenêtre d'observation
+#' @param graine graine fixée pour la reproduction
+#'
+#' @return Biais des 3 estimateurs
+#' @export
+#'
+#' @examples
+#' p_cause1 <- 0.5
+#' t_start <- 6
+#' n <- 18
+#' type1 <- constant
+#' type2 <- constant
+#' fonction_estim_comp_once(N,p_cause1,n,type1,type2,t_star,graine=133)
+#'
 fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
+
   p_cause2<-(1-p_cause1)
   data<-generation_comp(p_cause1 = p_cause1,p_cause2=p_cause2,t_star=t_star,nombre_obs = n,type1=type1,type2=type2,graine = graine)
   data$tox_time<-ifelse(data$status==2,t_star+1,data$tox_time)
@@ -91,7 +162,30 @@ fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
   return(sous_liste)
 }
 
+#' Calculer le biais des 3 estimateurs plusieurs fois selon le modèle à risques compétitifs
+#'
+#' @param K Nombre d'échantillon
+#' @param p_cause1 probabilité pour la cause 1 à t_star
+#' @param n taille d'échantillon
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2  forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param t_star fin de la fenêtre d'observation
+#' @param graine graine fixée pour la reproduction
+#'
+#' @return Biais des 3 estimateurs sur N échantillons
+#' @export
+#'
+#' @examples
+#' p_cause1 <- 0.5
+#' t_start <- 6
+#' n <- 18
+#' N <- 1000
+#' type1 <- constant
+#' type2 <- constant
+#' Simuler_estim_mult_times(N,p_cause1,n,type1,type2,t_star,graine=133)
+#'
 Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
+
   graine_inf <- graine
   graine_sup <- graine + K-1
   ensemble_graine<-c(graine_inf:graine_sup)
@@ -101,8 +195,30 @@ Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
   return(colMeans(sapply(result,as.numeric)))
 }
 
-########### Biais##############
+# Biais
+
+#' Calcul le biais selon differentes tailles d'échantillon, selon le modèle à risques comp.
+#'
+#' @param p_cause1 probabilité pour la cause 1 à t_star
+#' @param K Nombre d'échantillon
+#' @param t_star fin de la fenêtre d'observation
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param graine graine fixée pour la reproduction
+#'
+#' @return Biais des 3 estimateurs
+#' @export
+#'
+#' @examples
+#' p_cause1 <- 0.5
+#' t_start <- 6
+#' K <- 1000
+#' type1 <- constant
+#' type2 <- constant
+#' biais.selon.lambda_alt(p_cause1,K, type1,type2,t_star,graine=133)
+#'
 biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
+
   results <- NULL
   n <- 20
   while(n<100){
@@ -115,7 +231,32 @@ biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
   }
   return(results)
 }
+
+
+# EQM
+
+#'  Calcul l'EQM selon differentes tailles d'échantillon, selon le modèle à risques comp.
+#'
+#' @param p_cause1 probabilité pour la cause 1 à t_star
+#' @param K Nombre d'échantillon
+#' @param t_star fin de la fenêtre d'observation
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param graine graine fixée pour la reproduction
+#'
+#' @return EQM des 3 estimateurs
+#' @export
+#'
+#' @examples
+#' p_cause1 <- 0.5
+#' t_start <- 6
+#' K <- 1000
+#' type1 <- constant
+#' type2 <- constant
+#' eqm.selon.alpha(p_cause1,K,type1,type2,t_star,graine=133)
+#'
 eqm.selon.alpha<-function(p_cause1,K,t_star,type1,type2,graine){
+
   results <- NULL
   n <- 20
   graine_inf <- graine
@@ -134,7 +275,31 @@ eqm.selon.alpha<-function(p_cause1,K,t_star,type1,type2,graine){
   return(results)
 }
 
+
+# Graphiques
+
+#' Evolution du biais en fonction de la taille d'échantillon, selon le modèle à risques comp.
+#'
+#' @param N Nombre d'échantillon
+#' @param t_star fin de la fenêtre d'observation
+#' @param p proportion de TDL
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param graine graine fixée pour la reproduction
+#'
+#' @return Graphique du biais en fonction de n
+#' @export
+#'
+#' @examples
+#' p <- 0.3
+#' t_start <- 6
+#' N <- 1000
+#' type1 <- constant
+#' type2 <- constant
+#' fonction_ggplot_evol_biais_alt(N,t_star, p,type1,type2,graine=133)
+#'
 fonction_ggplot_evol_biais_alt <- function(N,t_star, p,type1,type2,graine=133) {
+
   library(gridExtra)
   library(ggplot2)
   library(scales)
@@ -187,7 +352,31 @@ fonction_ggplot_evol_biais_alt <- function(N,t_star, p,type1,type2,graine=133) {
   gg <- grid.arrange(gg1, gg2, ncol = 2, widths = c(8,8))
 }
 
+
+#' Boxplot des biais sur plusieurs échantillons selon le modèle à risques comp.
+#'
+#' @param K Nombre d'échantillon
+#' @param n taille d'échantillon
+#' @param p proportion de TDL
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param t_star fin de la fenêtre d'observation
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param graine graine fixée pour la reproduction
+#'
+#' @return Boxplot des 3 estimateurs
+#' @export
+#'
+#' @examples
+#' p <- 0.3
+#' t_start <- 6
+#' K <- 1000
+#' type1 <- constant
+#' type2 <- constant
+#' n <- 18
+#' plots_scenario_1_alt(K, n, t_star, p,type1,type2,graine=133)
+#'
 plots_scenario_1_alt <- function(K, n, p,type1,t_star,type2,graine=133){
+
   require(ggplot2)
   require(dplyr)
   require(tidyr)
@@ -232,8 +421,30 @@ plots_scenario_1_alt <- function(K, n, p,type1,t_star,type2,graine=133){
 
 }
 
-######## Utilisation des param?tres ###########
+# Utilisation des paramètres
+
+
+#' Evolution du biais pour differentes valeurs de p_cause1
+#'
+#' @param N Nombre d'échantillon
+#' @param t_star fin de la fenêtre d'observation
+#' @param vect_cause1 vecteur de differentes probabilité de cause 1
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param graine graine fixée pour la reproduction
+#'
+#' @return Graphique du biais selon les p_cause1
+#' @export
+#'
+#' @examples
+#' t_start <- 6
+#' N <- 1000
+#' type1 <- constant
+#' type2 <- constant
+#' fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133)
+#'
 fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133) {
+
   library(gridExtra)
   library(ggplot2)
   library(scales)
@@ -403,9 +614,28 @@ fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.
 
 ### Evolution ####
 
-######### EQM ###########
-
+######### EQM ##########
+#' Evolution de l'EQM pour plusieurs échantillons selon le modèle à risques compétitifs
+#'
+#' @param K Nombre d'échantillon
+#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param p proportion de TDL
+#' @param graine graine fixée pour la reproduction
+#' @param t_star fin de la fenêtre d'observation
+#'
+#' @return Graphiques de l'EQM
+#' @export
+#'
+#' @examples
+#' K <- 1000
+#' type1 <- constant
+#' p <- 0.3
+#' graine <- 133
+#' t_star <- 6
+#' eqm.selon.taille_echantillon_alt(K, type1, p,graine,t_star)
+#'
 eqm.selon.taille_echantillon_alt<-function(K, type1, p,graine,t_star){
+
   require(ggplot2)
   require(gridExtra)
   # On fixe un n de d?part ? 10 individus et on incr?ment par 5 jusqu'a 100
