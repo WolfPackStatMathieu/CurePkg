@@ -1,4 +1,4 @@
-######## premiere methode de generation ########
+######## Premiere methode de generation ########
 #' Calcul du biais pour chaque dose pour chaque estimateur avec un seul échantillon.
 #'
 #' @param n nombre d'individus considérés.

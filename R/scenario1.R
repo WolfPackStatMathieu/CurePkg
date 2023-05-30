@@ -88,19 +88,19 @@ calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
 }
 
 #################Simulation en plusieurs fois.##########
-#'Calculer le biais des trois estimateurs pour un n-échantillon.
+#'Calculer les trois estimateurs pour un n-échantillon.
 #'
 #' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
 #' @param lambda : parametre de la loi weibull.
 #' @param t_star : Fin de la fenetre d'observation.
 #' @param k : paramètre de la loi weibull.
 #' @param p : proportion réelle de non-guéris.
-#' @return : Un n-echantillon.
+#' @return : Vecteur,valeur des trois estimateurs pour un n-échantillon.
 #' @export
 #'
 #' @examples
 #' ####test#####
-#' liste_biais<-Simuler_biais_un_n_ech(n=100,lambda=2,t_tsar=6,p=0.33,k=1)
+#' vecteur_estimateurs<-Simuler_biais_un_n_ech(n=100,lambda=2,t_tsar=6,p=0.33,k=1)
 Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
   database<-Generation_un_ech(n=n,lambda=lambda,t_star=t_star,p=p,k=k)
   estimateur_bern<-fonction_Bern(df=database)
@@ -111,7 +111,7 @@ Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
   names(liste_biais)<-c("Modele_bernoulli","Modele_survie","Modele_guerison")
   return(liste_biais)
 }
-#'Calculer le biais moyen des trois estimateurs pour un K n-échantillon.
+#'Calculer la moyenne des trois estimateurs pour un K n-échantillon.
 #'
 #' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
 #' @param lambda : parametre de la loi weibull.
@@ -119,12 +119,12 @@ Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
 #' @param k : paramètre de la loi weibull.
 #' @param p : proportion réelle de non-guéris.
 #' @param K : nombre de répétitions de l'expérience.
-#' @return : Un n-echantillon.
+#' @return : Vecteur. Moyenne des trois estimateurs.
 #' @export
 #'
 #' @examples
 #' ####test#####
-#' liste_biais<-Simuler_biais_taillen(n=100,lambda=2,t_tsar=6,p=0.33,k=1,K=100)
+#' vecteur_estims<-Simuler_biais_taillen(n=100,lambda=2,t_tsar=6,p=0.33,k=1,K=100)
 Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
   # Simuler_biais_un_n_ech retourne le biais du modele de guerison
   # et le biais du modele de survie
@@ -147,7 +147,7 @@ Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
 #' @param t_star : Fin de la fenetre d'observation.
 #' @param p : proportion réelle de non-guéris.
 #' @param K : nombre de répétitions de l'expérience.
-#' @return : Un n-echantillon.
+#' @return : Dataframe. Valeur du biais moyen pour chaque valeur du paramètre k.
 #' @export
 #'
 #' @examples

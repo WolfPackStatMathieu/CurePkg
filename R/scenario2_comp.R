@@ -1,3 +1,17 @@
+#' Calcul du biais pour chaque dose pour chaque estimateur. Un seul échantillon est utilisé.
+#'
+#' @param n nombre d'individus considérés.
+#' @param probabilite_a_priori vecteur des probabilités de toxicité pour chaque dose.
+#' @param type1 type de fonction de risque pour l'évènement de la toxicité.
+#' @param type2 type de fonction de risque pour l'évènement de la guérison.
+#' @param t_star fin de la fenetre d'observation
+#' @param graine graine utilisée pour générer l'échantillon.
+#' @return Vecteur. Valeur des estimateurs.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' biais<-function_estim_doses_comp(n=100,probabilite_a_priori=c(0.33,0.5),type1="increasing",type2="increasing",t_star=6)
 function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,graine=133){
   nb_doses<-length(probabilite_a_priori)
   require(dfcrm)
@@ -111,7 +125,19 @@ generation_comp_mean<-function(K,n,probabilite_a_priori,t_star,type1,type2,grain
   return(data_returns)
 }
 ########## Biais #####
-
+#'Visualiser l'évolution du biais pour les trois modèles en fonction de la taille de l'échantillon pour la dose i. Voir evol_biais_comp.
+#'
+#' @param results Résultat pour chaque taille d'échantillon de la fonction generation_comp_mean.
+#' @param K nombre de répétition effectuées.
+#' @param i indice de la dose analysée.
+#' @param n nombre de tailles différentes considérées.
+#' @param type1 type de fonction de risque pour l'évènement de la toxicité.
+#' @param type2 type de fonction de risque pour l'évènement de la guérison.
+#' @return Un objet "grid_arrange".
+#' @export
+#'
+#' @examples
+#' ######Test ######
 evol_n_par_dose<-function(results,n,i,K=K,type1,type2){
   longueur_resultats<-c(1:length(n))
   function_intermed<-function(x,results,i){
@@ -156,6 +182,21 @@ evol_n_par_dose<-function(results,n,i,K=K,type1,type2){
   gg <- {grid.arrange(gg1, gg2, ncol = 2, widths = c(8,8))}
   return(gg)
 }
+########## Biais #####
+#' Visualiser l'évolution du biais moyen en fonction de la taille de l'échantillon (de 20 à 100) pour toutes les doses.
+#'
+#' @param K nombre de graines aléatoires considérées.
+#' @param grain_depart Graine aléatoire de départ.
+#' @param type1 type de fonction de risque pour l'évènement de la toxicité.
+#' @param type2 type de fonction de risque pour l'évènement de la guérison.
+#' @return Liste de ggplots.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' t1<-"increasing"
+#' t2<-"increasing
+#' biais<-evol_biais_comp(K=100,probabilite_a_priori=c(0.33,0.5),type1=t1,type2=t2,t_star=6)
 evol_biais_comp<-function(K,probabilite_a_priori,t_star,type1,type2,graine_depart){
   debut <- 20
   fin <- 100
@@ -168,6 +209,21 @@ evol_biais_comp<-function(K,probabilite_a_priori,t_star,type1,type2,graine_depar
 
 
 #### EQM ####
+#' Visualiser l'évolution de l'eqm en fonction de la taille de l'échantillon (de 20 à 100) pour toutes les doses.
+#'
+#' @param K nombre de graines aléatoires considérées.
+#' @param graine_depart Graine aléatoire de départ.
+#' @param probabilite_a_priori Valeur des probabilités de toxicité pour chaque dose.
+#' @param type1 type de fonction de risque pour l'évènement de la toxicité.
+#' @param type2 type de fonction de risque pour l'évènement de la guérison.
+#' @return Liste de ggplots.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' t1<-"increasing"
+#' t2<-"increasing
+#' biais<-evol_eqm_comp(K=100,probabilite_a_priori=c(0.33,0.5),type1=t1,type2=t2,t_star=6)
 evol_eqm_comp<-function(K,probabilite_a_priori,t_star,type1,graine_depart,type2){
   debut <- 20
   fin <- 100
@@ -177,6 +233,18 @@ evol_eqm_comp<-function(K,probabilite_a_priori,t_star,type1,graine_depart,type2)
   ensemble_ggplots_par_dose<-lapply(c(1:length(probabilite_a_priori)),evol_n_par_dose_eqm,results=results,n=n,K=K,type1=type1,type2=type2)
   return(ensemble_ggplots_par_dose)
 }
+#'Visualiser l'évolution du biais pour les trois modèles en fonction de la taille de l'échantillon pour la dose i.
+#'
+#' @param results Résultat pour chaque taille d'échantillon de la fonction generation_comp_eqm.
+#' @param K nombre de répétition effectuées.
+#' @param i indice de la dose analysée.
+#' @param n nombre de tailles différentes considérées.
+#' @param type1 type de fonction de risque pour l'évènement de la toxicité.
+#' @param type2 type de fonction de risque pour l'évènement de la guérison.
+#' @return Un objet "grid_arrange".
+#' @export
+#'
+#' @examples
 evol_n_par_dose_eqm<-function(results,n,i,K=K,type1,type2){
   require(ggplot2)
   require(gridExtra)
@@ -236,6 +304,21 @@ evol_n_par_dose_eqm<-function(results,n,i,K=K,type1,type2){
   )}
   return(gg)
 }
+#'Calculer l'EQM pour chaque dose sur K n-échantillons.
+#'
+#' @param
+#' @param K nombre de graines considérées.
+#' @param i indice de la dose analysée.
+#' @param n taille de l'échantillon.
+#' @param type1 type de fonction de risque pour l'évènement de la toxicité.
+#' @param type2 type de fonction de risque pour l'évènement de la guérison.
+#' @param graine_depart graine de départ utilisée.
+#' @return Un dataframe. Valeur de l'EQM pour chaque dose/méthode.
+#' @export
+#'
+#' @examples
+#' ######Test ######
+#' Geqm<-generation_comp_eqm(K=100,n=100,probabilite_a_priou=c(0.3,0.5),type1="constant",graine_depart=133,type2="increasing",t_star=6)
 generation_comp_eqm<-function(K,n,probabilite_a_priori,t_star,type1,graine_depart,type2){
   require(ggplot2)
   require(gridExtra)
