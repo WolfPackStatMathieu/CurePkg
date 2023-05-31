@@ -152,36 +152,36 @@ evol_n_par_dose<-function(results,n,i,K=K,type1,type2){
   result_final$modele_survie<-result_final$modele_survie-result_final$p
   borne_min <- min(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
   borne_max <- max(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
-  gg1 <- {ggplot(data = result_final, aes(x = taille_echantillon)) +
-      geom_smooth(aes(y = modele_guerison, col = "modele guerison"), size = 1, alpha = 0.5) +
-      geom_smooth(aes(y = modele_bernoulli, col = "modele bernoulli"), size = 1, alpha = 0.5) +
-      scale_color_manual(name = "Modeles", values = c("modele guerison"="red","modele bernoulli"="blue"))+
-      ggtitle("Evolution du biais  \n  en fonction de la taille d'echantillon") +
-      xlab("Taille echantillon") + ylab("Biais moyen") +
-      theme_classic() +
-      theme(legend.title=element_blank(),
-            axis.text=element_text(family = "Helvetica", size=10),
-            axis.title=element_text(family = "Helvetica", size=12),
-            plot.title = element_text(family = "Helvetica", size = 10)) +
-      ylim(borne_min, borne_max) }
-  gg2 <- {ggplot(data = result_final, aes(x = taille_echantillon)) +
-      geom_smooth(aes(y = modele_guerison, col = "modele guerison"), size = 1, alpha = 0.5) +
-      geom_smooth(aes(y = modele_survie, col = "modele survie"), size = 1, alpha = 0.5) +
-      scale_color_manual(name = "Modeles", values = c("modele guerison"="red","modele survie"="darkgreen")) +
-      ggtitle("Evolution du biais \n en fonction de la taille") +
+  gg1 <- {ggplot2::ggplot(data = result_final, ggplot2::aes(x = taille_echantillon)) +
+      ggplot2::geom_smooth(ggplot2::aes(y = modele_guerison, col = "modele guerison"), size = 1, alpha = 0.5) +
+      ggplot2::geom_smooth(ggplot2::aes(y = modele_bernoulli, col = "modele bernoulli"), size = 1, alpha = 0.5) +
+      ggplot2::scale_color_manual(name = "Modeles", values = c("modele guerison"="red","modele bernoulli"="blue"))+
+      ggplot2::ggtitle("Evolution du biais  \n  en fonction de la taille d'echantillon") +
+      ggplot2::xlab("Taille echantillon") + ggplot2::ylab("Biais moyen") +
+      ggplot2::theme_classic() +
+      ggplot2::theme(legend.title=ggplot2::element_blank(),
+            axis.text=ggplot2::element_text(family = "Helvetica", size=10),
+            axis.title=ggplot2::element_text(family = "Helvetica", size=12),
+            plot.title = ggplot2::element_text(family = "Helvetica", size = 10)) +
+      ggplot2::ylim(borne_min, borne_max) }
+  gg2 <- {ggplot2::ggplot(data = result_final, ggplot2::aes(x = taille_echantillon)) +
+      ggplot2::geom_smooth(ggplot2::aes(y = modele_guerison, col = "modele guerison"), size = 1, alpha = 0.5) +
+      ggplot2::geom_smooth(ggplot2::aes(y = modele_survie, col = "modele survie"), size = 1, alpha = 0.5) +
+      ggplot2::scale_color_manual(name = "Modeles", values = c("modele guerison"="red","modele survie"="darkgreen")) +
+      ggplot2::ggtitle("Evolution du biais \n en fonction de la taille") +
 
-      xlab("Taille echantillon") + ylab("Biais moyen") +
-      theme_classic() +
-      theme(legend.title=element_blank(),
-            axis.text=element_text(family = "Helvetica", size=10),
-            axis.title=element_text(family = "Helvetica", size=12),
-            plot.title = element_text(family = "Helvetica", size = 10)) +
-      ylim(borne_min, borne_max)+
-      labs(caption = sprintf("p=%s,N=%s,type1=%s,type2=%s",
+      ggplot2::xlab("Taille echantillon") + ggplot2::ylab("Biais moyen") +
+      ggplot2::theme_classic() +
+      ggplot2::theme(legend.title=ggplot2::element_blank(),
+            axis.text=ggplot2::element_text(family = "Helvetica", size=10),
+            axis.title=ggplot2::element_text(family = "Helvetica", size=12),
+            plot.title = ggplot2::element_text(family = "Helvetica", size = 10)) +
+      ggplot2::ylim(borne_min, borne_max)+
+      ggplot2::labs(caption = sprintf("p=%s,N=%s,type1=%s,type2=%s",
                              as.character(result_final$p),
                              as.character(K),as.character(type1),as.character(type2)))}
 
-  gg <- {grid.arrange(gg1, gg2, ncol = 2, widths = c(8,8))}
+  gg <- {gridExtra::grid.arrange(gg1, gg2, ncol = 2, widths = c(8,8))}
   return(gg)
 }
 ########## Biais #####
@@ -262,21 +262,21 @@ evol_n_par_dose_eqm<-function(results,n,i,K=K,type1,type2){
   borne_min <- min(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
   borne_max <- max(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)
 
-  gg1 <- {ggplot(data = result_final, aes(x = taille_echantillon)) +
-      geom_smooth(aes(y = modele_guerison, col = "modele guerison"), size = 1, alpha = 0.5) +
-      geom_smooth(aes(y = modele_survie, col = "modele survie"), size = 1, alpha = 0.5) +
-      scale_color_manual(name = "Modeles", values =  c("modele guerison"="red", "modele survie"="darkgreen" )) +
+  gg1 <- {ggplot2::ggplot(data = result_final, ggplot2::aes(x = taille_echantillon)) +
+      ggplot2::geom_smooth(aes(y = modele_guerison, col = "modele guerison"), size = 1, alpha = 0.5) +
+      ggplot2::geom_smooth(aes(y = modele_survie, col = "modele survie"), size = 1, alpha = 0.5) +
+      ggplot2::scale_color_manual(name = "Modeles", values =  c("modele guerison"="red", "modele survie"="darkgreen" )) +
       # ggtitle("Evolution de l'EQM en fonction de la \ntaille d'echantillon") +
-      xlab("Taille echantillon") + ylab("EQM") +
-      theme_classic() +
+      ggplot2::xlab("Taille echantillon") + ggplot2::ylab("EQM") +
+      ggplot2::theme_classic() +
 
-      ylim(borne_min, borne_max) +
-      labs(caption = sprintf("p=%s, N=%s, type1=%s, type2=%s",
+      ggplot2::ylim(borne_min, borne_max) +
+      ggplot2::labs(caption = sprintf("p=%s, N=%s, type1=%s, type2=%s",
                              as.character(result_final$p),
                              as.character(K),as.character(type1),as.character(type2))
       )
   }+
-    theme(legend.title=element_blank(),
+    ggplot2::theme(legend.title=element_blank(),
           axis.text = element_text(family = "Helvetica", size=20),
           axis.title=element_text(family = "Helvetica", size=20),
           plot.title = element_text(family = "Helvetica", size = 24)
@@ -284,24 +284,24 @@ evol_n_par_dose_eqm<-function(results,n,i,K=K,type1,type2){
           ,text = element_text(size=rel(20))
     )
 
-  gg2 <- {ggplot(data = result_final, aes(x = taille_echantillon)) +
-      geom_smooth(aes(y = modele_guerison, col = "modele guerison"), size = 1, alpha = 0.5) +
-      geom_smooth(aes(y = modele_bernoulli, col = "modele bernoulli"), size = 1, alpha = 0.5) +
-      scale_color_manual(name = "Modeles", values = c("modele guerison"="red", "modele bernoulli"="blue" )) +
+  gg2 <- {ggplot2::ggplot(data = result_final, ggplot2::aes(x = taille_echantillon)) +
+      ggplot2::geom_smooth(ggplot2::aes(y = modele_guerison, col = "modele guerison"), size = 1, alpha = 0.5) +
+      ggplot2::geom_smooth(ggplot2::aes(y = modele_bernoulli, col = "modele bernoulli"), size = 1, alpha = 0.5) +
+      ggplot2::scale_color_manual(name = "Modeles", values = c("modele guerison"="red", "modele bernoulli"="blue" )) +
       # ggtitle("Evolution de l'EQM en fonction de la \ntaille d'echantillon") +
-      xlab("Taille echantillon") + ylab("EQM") +
-      theme_classic() +
-      ylim(borne_min, borne_max)+
-      labs(caption = "")}+
-    theme(legend.title=element_blank(),
-          axis.text=element_text(family = "Helvetica", size=20),
-          axis.title=element_text(family = "Helvetica", size=20),
-          plot.title = element_text(family = "Helvetica", size = 24)
-          , legend.text = element_text(family = "Helvetica", size = 20)
-          ,text = element_text(size=rel(20))
+      ggplot2::xlab("Taille echantillon") + ggplot2::ylab("EQM") +
+      ggplot2::theme_classic() +
+      ggplot2::ylim(borne_min, borne_max)+
+      ggplot2::labs(caption = "")}+
+    ggplot2::theme(legend.title=ggplot2::element_blank(),
+          axis.text=ggplot2::element_text(family = "Helvetica", size=20),
+          axis.title=ggplot2::element_text(family = "Helvetica", size=20),
+          plot.title = ggplot2::element_text(family = "Helvetica", size = 24)
+          , legend.text = ggplot2::element_text(family = "Helvetica", size = 20)
+          ,text = ggplot2::element_text(size=rel(20))
     )
 
-  gg <- {grid.arrange(gg2, gg1, ncol = 2, widths = c(8,8)
+  gg <- {gridExtra::grid.arrange(gg2, gg1, ncol = 2, widths = c(8,8)
                       ,top =textGrob(paste("Evolution de l'EQM en fonction de la taille d'echantillon, dose ",i),gp=gpar(fontsize=24,font=3))
   )}
   return(gg)

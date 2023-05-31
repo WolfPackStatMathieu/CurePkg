@@ -268,10 +268,10 @@ fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
       color = expression(alpha))+
     ggplot2::theme_bw()
 
-  gg3 <-  ggplot2::ggplot(RES0.2.3, aes(k, mean.cure)) +
+  gg3 <-  ggplot2::ggplot(RES0.2.3, ggplot2::aes(k, mean.cure)) +
     ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
-    ggplot2::geom_line(data = RES0.5.3, aes(k, mean.cure, color = "0.5"), size = 0.6) +
-    ggplot2::geom_line(data = RES0.1.3, aes(k, mean.cure, color = "0.1"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, ggplot2::aes(k, mean.cure, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, ggplot2::aes(k, mean.cure, color = "0.1"), size = 0.6) +
     ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
     ggplot2::ylim(borne_min.c -0.1, borne_max.c+0.1)+
     ggplot2::labs(
@@ -389,10 +389,10 @@ fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
 
   # Plot the data
 
-  gg1 <-  ggplot2::ggplot(RES0.2.3, aes(n, mean.bernoulli)) +
+  gg1 <-  ggplot2::ggplot(RES0.2.3, ggplot2::aes(n, mean.bernoulli)) +
     ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
-    ggplot2::geom_line(data = RES0.5.3, aes(n, mean.bernoulli, color = "0.5"), size = 0.6) +
-    ggplot2::geom_line(data = RES0.1.3, aes(n, mean.bernoulli, color = "0.1"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, ggplot2::aes(n, mean.bernoulli, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, ggplot2::aes(n, mean.bernoulli, color = "0.1"), size = 0.6) +
     ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
     ggplot2::ylim(borne_min.b -0.1, borne_max.b+0.1)+
     ggplot2::labs(
@@ -401,10 +401,10 @@ fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
       y = "biais moyen",
       color = "n" )+
     ggplot2::theme_bw()
-  gg2 <-  ggplot2::ggplot(RES0.2.3, aes(n, mean.surv)) +
+  gg2 <-  ggplot2::ggplot(RES0.2.3, ggplot2::aes(n, mean.surv)) +
     ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
-    ggplot2::geom_line(data = RES0.5.3, aes(n, mean.surv, color = "0.5"), size = 0.6) +
-    ggplot2::geom_line(data = RES0.1.3, aes(n, mean.surv, color = "0.1"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, ggplot2::aes(n, mean.surv, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, ggplot2::aes(n, mean.surv, color = "0.1"), size = 0.6) +
     ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
     ggplot2::ylim(borne_min -0.1, borne_max+0.1)+
     ggplot2::labs(
@@ -414,10 +414,10 @@ fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
       color = "n")+
     ggplot2::theme_bw()
 
-  gg3 <-  ggplot2::ggplot(RES0.2.3, aes(n, mean.cure)) +
+  gg3 <-  ggplot2::ggplot(RES0.2.3, ggplot2::aes(n, mean.cure)) +
     ggplot2::geom_line(aes(color = "0.2"), size = 0.6) +
-    ggplot2::geom_line(data = RES0.5.3, aes(n, mean.cure, color = "0.5"), size = 0.6) +
-    ggplot2::geom_line(data = RES0.1.3, aes(n, mean.cure, color = "0.1"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.5.3, ggplot2::aes(n, mean.cure, color = "0.5"), size = 0.6) +
+    ggplot2::geom_line(data = RES0.1.3, ggplot2::aes(n, mean.cure, color = "0.1"), size = 0.6) +
     ggplot2::scale_color_manual(name = expression(lambda), values = c("red", "black", "blue")) +
     ggplot2::ylim(borne_min.c -0.1, borne_max.c+0.1)+
     ggplot2::labs(
