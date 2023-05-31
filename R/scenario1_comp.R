@@ -255,7 +255,7 @@ biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
 #' K <- 1000
 #' type1 <- "constant"
 #' type2 <- "constant"
-#' eqm.selon.alpha(p_cause1=_cause1,K=K,type1=type1,type2=type2,t_star=t_star,graine=133)
+#' eqm.selon.alpha(p_cause1=0.5,K=K,type1=type1,type2=type2,t_star=t_star,graine=133)
 #'
 eqm.selon.alpha<-function(p_cause1,K,t_star,type1,type2,graine){
 
