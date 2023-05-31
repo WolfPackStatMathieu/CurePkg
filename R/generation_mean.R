@@ -28,13 +28,7 @@
 #' plot(donnees_taille_biaismoyen$Size,donnees_taille_biaismoyen$Mean_Bias_Cure,main="The mean bias according to the size with Survival function")
 #' points(x=donnees_taille_biaismoyen$Size,y=donnees_taille_biaismoyen$Mean_Bias_Surv,col="red")
 fonction_generation_taille_mean<-function(vector_size,liste_parameter,K){
-  require(parallel)
-  ### renvoie la g?n?ration avec des tailles diff?rentes du mod?le model (string) ayant comme param?tre la liste_parameter,
-  ### liste de param?tres avec le mod?les. 1 seul comme bernoulli et 2 pour exp() (lambda et t_star).
-
-  #on r?ordonne vector_size par ordre des tailles d'echantillon
   vector_size<-vector_size[order(vector_size)]
-  ##### id?e.
   Value_bias<-lapply(vector_size,Simuler_biais_taillen,K=K,lambda=liste_parameter[['lambda']],t_star=liste_parameter[["t_star"]],
                      p=liste_parameter[["p"]],k=liste_parameter[["k"]])
   value_means<-as.data.frame(t(sapply(Value_bias,colMeans)))
