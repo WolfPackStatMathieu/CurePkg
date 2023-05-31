@@ -28,5 +28,8 @@ t_star<-6
 liste_parameter<-list(lambda_test,t_star)
 names(liste_parameter)<-c("lambda","t_star")
 modele<-"surv"
-test_graph_exp<-fonction_graph_fonc_size(vector_size = vecteur_size,model=modele,liste_parameter=liste_parameter)
+test_graph_exp<-fonction_graph_fonc_size(
+vector_size = vecteur_size,
+model=modele,
+liste_parameter=liste_parameter)
 }

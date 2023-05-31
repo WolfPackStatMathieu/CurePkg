@@ -37,5 +37,6 @@ lmoins<-1
 l_plus<-1000
 N<-50
 shape<-2
-test_plot<-fonction_compar_plots(limit_sup = l_plus,limit_inf = lmoins,N=N,p=p2,lambda=lambda7,t_star=t_star,K=k,sh=shape)
+test_plot<-fonction_compar_plots(limit_sup = l_plus,limit_inf = lmoins,
+N=N,p=p2,lambda=lambda7,t_star=t_star,K=k,sh=shape)
 }

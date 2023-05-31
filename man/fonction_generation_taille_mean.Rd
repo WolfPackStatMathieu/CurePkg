@@ -31,10 +31,13 @@ k<-1
 liste_parameter<-list(lambda_test,t_star,p=p,k)
 names(liste_parameter)<-c("lambda","t_star","p","k")
 K2<-20
-test_exp_taillemoy<-fonction_generation_taille_mean(vector_size=vecteur_size,K=K2,liste_parameter = liste_parameter)
+test_exp_taillemoy<-fonction_generation_taille_mean(
+vector_size=vecteur_size,K=K2,liste_parameter = liste_parameter)
 #################### Plot des r?sultats en fonction de la taille.########
 donnees_taille_biaismoyen<-cbind.data.frame(vecteur_size[order(vecteur_size)],test_exp_taillemoy)
 colnames(donnees_taille_biaismoyen)<-c("Size","Mean_Bias_Cure","Mean_Bias_Surv")
-plot(donnees_taille_biaismoyen$Size,donnees_taille_biaismoyen$Mean_Bias_Cure,main="The mean bias according to the size with Survival function")
+plot(donnees_taille_biaismoyen$Size,
+donnees_taille_biaismoyen$Mean_Bias_Cure,
+main="The mean bias according to the size with Survival function")
 points(x=donnees_taille_biaismoyen$Size,y=donnees_taille_biaismoyen$Mean_Bias_Surv,col="red")
 }

@@ -105,19 +105,22 @@ variance_bern_Ntimes_sizen<-function(N,n,p){
 #' modele<-"bernoulli"
 #' liste_param<-list(p)
 #' names(liste_param)<-c("p")
-#' test_bern_var_sizes<-variance_sizes(vector_size = vecteur_size,model=modele,liste_parameter = liste_param,K=N)
+#' test_bern_var_sizes<-variance_sizes(vector_size = vecteur_size,
+#' model=modele,liste_parameter = liste_param,K=N)
 #' lambda_test<-0.33
 #' t<-6
 #' liste_param_exp<-list(lambda_test,t)
 #' names(liste_param_exp)<-c("lambda","t_star")
 #' modele_exp<-"surv"
-#' test_exp_var_sizes<-variance_sizes(vector_size = vecteur_size,model=modele_exp,liste_parameter = liste_param_exp,K=N)
+#' test_exp_var_sizes<-variance_sizes(vector_size = vecteur_size,
+#' model=modele_exp,liste_parameter = liste_param_exp,K=N)
 #' #### test weibull####
 #' k<-2
 #' modele_weib<-"weibull"
 #' liste_paramweib<-list(lambda_test,t,k)
 #' names(liste_paramweib)<-c("lambda","t_star","k")
-#' test_wei_var_sizes<-variance_sizes(vector_size = vecteur_size,model=modele_weib,liste_parameter = liste_paramweib,K=N)
+#' test_wei_var_sizes<-variance_sizes(vector_size = vecteur_size,
+#' model=modele_weib,liste_parameter = liste_paramweib,K=N)
 #' plot(vecteur_size[order(vecteur_size)],test_wei_var_sizes)
 
 

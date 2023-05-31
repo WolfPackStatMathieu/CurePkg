@@ -11,7 +11,9 @@
 #'
 #' @examples
 #' ######Test ######
-#' biais<-function_estim_doses_comp(n=100,probabilite_a_priori=c(0.33,0.5),type1="increasing",type2="increasing",t_star=6)
+#' biais<-function_estim_doses_comp(
+#' n=100,probabilite_a_priori=c(0.33,0.5),
+#' type1="increasing",type2="increasing",t_star=6)
 function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,graine=133){
   nb_doses<-length(probabilite_a_priori)
   require(dfcrm)
@@ -225,7 +227,8 @@ evol_biais_comp<-function(K,probabilite_a_priori,t_star,type1,type2,graine_depar
 #'
 #' @examples
 #' ######Test ######
-#' biais<-evol_eqm_comp(K=100,probabilite_a_priori=c(0.33,0.5),type1="increasing",type2="increasing",t_star=6)
+#' biais<-evol_eqm_comp(K=100,probabilite_a_priori=c(0.33,0.5),
+#' type1="increasing",type2="increasing",t_star=6)
 evol_eqm_comp<-function(K,probabilite_a_priori,t_star,type1,graine_depart,type2){
   debut <- 20
   fin <- 100
@@ -319,7 +322,9 @@ evol_n_par_dose_eqm<-function(results,n,i,K=K,type1,type2){
 #'
 #' @examples
 #' ######Test ######
-#' Geqm<-generation_comp_eqm(K=100,n=100,probabilite_a_priou=c(0.3,0.5),type1="constant",graine_depart=133,type2="increasing",t_star=6)
+#' Geqm<-generation_comp_eqm(
+#' K=100,n=100,probabilite_a_priou=c(0.3,0.5),
+#' type1="constant",graine_depart=133,type2="increasing",t_star=6)
 generation_comp_eqm<-function(K,n,probabilite_a_priori,t_star,type1,graine_depart,type2){
   require(ggplot2)
   require(gridExtra)

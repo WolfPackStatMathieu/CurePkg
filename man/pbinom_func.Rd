@@ -27,5 +27,11 @@ test1 <- pbinom_func(vec_p, n,N=N)
 
 #plot du résultat
 #----------------
-ggplot2::ggplot(data.frame(x = vec_p, y = test1), ggplot2::aes(x = x, y = y)) + ggplot2::geom_line(color = "blue", size = 1.5) + ggplot2::ggtitle("Bias with different probabilities") + ggplot2::xlab("p") + ggplot2::ylab("Bias") + ggplot2::theme_minimal()
+ggplot2::ggplot(data.frame(x = vec_p, y = test1),
+ggplot2::aes(x = x, y = y)) +
+ggplot2::geom_line(color = "blue", size = 1.5) +
+ggplot2::ggtitle("Bias with different probabilities") +
+ggplot2::xlab("p") +
+ggplot2::ylab("Bias") +
+ggplot2::theme_minimal()
 }

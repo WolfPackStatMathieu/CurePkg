@@ -30,5 +30,10 @@ test <-lambda_func(lambda_vec=lambda_vec,list_params =  liste_parameter,N=N)
 
 #plot du résultat
 #----------------
-ggplot2::ggplot(data.frame(x = lambda_vec, y = test), ggplot2::aes(x = x, y = y)) + ggplot2::geom_line(color = "blue", size = 1.5) + ggplot2::ggtitle("Bias with different lambdas") + ggplot2::xlab("lambda") + ggplot2::ylab("Biais") + ggplot2::theme_minimal()
+ggplot2::ggplot(data.frame(x = lambda_vec, y = test),
+ggplot2::aes(x = x, y = y)) +
+ggplot2::geom_line(color = "blue", size = 1.5) +
+ggplot2::ggtitle("Bias with different lambdas") +
+ggplot2::xlab("lambda") + ggplot2::ylab("Biais") +
+ggplot2::theme_minimal()
 }

@@ -3,17 +3,17 @@
 # source("fonctions_simulations_competition.R")
 # source("http://myweb.uiowa.edu/pbreheny/7210/f19/notes/fun.R")
 
-#' Générer un échantillon selon un modèle à risques compétitifs
+#' Generer un echantillon selon un modele e risques competitifs
 #'
-#' @param p_cause1 probabilité pour la cause 1 à t_star
-#' @param p_cause2 probabilité pour la cause 1 à t_star
+#' @param p_cause1 probabilite pour la cause 1 e t_star
+#' @param p_cause2 probabilite pour la cause 1 e t_star
 #' @param t_star fin de la fenêtre d'observation
-#' @param nombre_obs taille d'échantillon
-#' @param graine graine fixée pour la reproduction
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param nombre_obs taille d'echantillon
+#' @param graine graine fixee pour la reproduction
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
 #'
-#' @return un dataframe avec le statut, temps de toxicité et observation de toxicité des patients
+#' @return un dataframe avec le statut, temps de toxicite et observation de toxicite des patients
 #' @export
 #'
 #' @examples
@@ -42,16 +42,16 @@ generation_comp<-function(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2
 
 # Estimateurs.
 
-#' Générer un graphique de la proportion de censures dans les échantillons selon le modèle
-#' à risques compétitifs
+#' Generer un graphique de la proportion de censures dans les echantillons selon le modele
+#' e risques competitifs
 #'
-#' @param N nombre d'échantillon
-#' @param p_cause1 probabilité pour la cause 1 à t_star
-#' @param n taille d'échantillon
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param N nombre d'echantillon
+#' @param p_cause1 probabilite pour la cause 1 e t_star
+#' @param n taille d'echantillon
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
 #' @param t_star fin de la fenêtre d'observation
-#' @param graine graine fixée pour la reproduction
+#' @param graine graine fixee pour la reproduction
 #'
 #' @return Graphique de la proportion de censures
 #' @export
@@ -87,8 +87,8 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
     nb_status2 <- length(which(df$status==2))
 
     censures[i] <- (nb_status0/n)*100     # censures
-    TDL[i] <- (nb_status1/n)*100    # non guéris (toxicit?)
-    gueris[i] <- (nb_status2/n)*100    # guéris
+    TDL[i] <- (nb_status1/n)*100    # non gueris (toxicit?)
+    gueris[i] <- (nb_status2/n)*100    # gueris
   }
   # censures_mean <- mean(censures)
   # TDL_mean <- mean(TDL)
@@ -110,7 +110,7 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
          lwd = c(2, 2),
          bty ="n",
          cex = 0.6) # Line widths
-  plot(x=dens_censure$x, y=dens_censure$y, main="Censures", type="l", xlab="censure", ylab="densité")
+  plot(x=dens_censure$x, y=dens_censure$y, main="Censures", type="l", xlab="censure", ylab="densite")
   # M <- cbind(TDL, censures)
   # dnplot(M[,1])
   # dnplot(M[,1], pos=TRUE)
@@ -120,14 +120,14 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
 
 }
 
-#' Calculer le biais des 3 estimateurs une fois selon le modèle à risques compétitifs
+#' Calculer le biais des 3 estimateurs une fois selon le modele e risques competitifs
 #'
-#' @param p_cause1 probabilité pour la cause 1 à t_star
-#' @param n taille d'échantillon
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param p_cause1 probabilite pour la cause 1 e t_star
+#' @param n taille d'echantillon
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
 #' @param t_star fin de la fenêtre d'observation
-#' @param graine graine fixée pour la reproduction
+#' @param graine graine fixee pour la reproduction
 #'
 #' @return Biais des 3 estimateurs
 #' @export
@@ -164,17 +164,17 @@ fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
   return(sous_liste)
 }
 
-#' Calculer le biais des 3 estimateurs plusieurs fois selon le modèle à risques compétitifs
+#' Calculer le biais des 3 estimateurs plusieurs fois selon le modele e risques competitifs
 #'
-#' @param K Nombre d'échantillon
-#' @param p_cause1 probabilité pour la cause 1 à t_star
-#' @param n taille d'échantillon
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2  forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param K Nombre d'echantillon
+#' @param p_cause1 probabilite pour la cause 1 e t_star
+#' @param n taille d'echantillon
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2  forme de la fonction de risque instantane (constant, increasing or decreasing)
 #' @param t_star fin de la fenêtre d'observation
-#' @param graine graine fixée pour la reproduction
+#' @param graine graine fixee pour la reproduction
 #'
-#' @return Biais des 3 estimateurs sur N échantillons
+#' @return Biais des 3 estimateurs sur N echantillons
 #' @export
 #'
 #' @examples
@@ -199,14 +199,14 @@ Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
 
 # Biais
 
-#' Calcul le biais selon differentes tailles d'échantillon, selon le modèle à risques comp.
+#' Calcul le biais selon differentes tailles d'echantillon, selon le modele e risques comp.
 #'
-#' @param p_cause1 probabilité pour la cause 1 à t_star
-#' @param K Nombre d'échantillon
+#' @param p_cause1 probabilite pour la cause 1 e t_star
+#' @param K Nombre d'echantillon
 #' @param t_star fin de la fenêtre d'observation
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param graine graine fixée pour la reproduction
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param graine graine fixee pour la reproduction
 #'
 #' @return Biais des 3 estimateurs
 #' @export
@@ -237,14 +237,14 @@ biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
 
 # EQM
 
-#'  Calcul l'EQM selon differentes tailles d'échantillon, selon le modèle à risques comp.
+#'  Calcul l'EQM selon differentes tailles d'echantillon, selon le modele e risques comp.
 #'
-#' @param p_cause1 probabilité pour la cause 1 à t_star
-#' @param K Nombre d'échantillon
+#' @param p_cause1 probabilite pour la cause 1 e t_star
+#' @param K Nombre d'echantillon
 #' @param t_star fin de la fenêtre d'observation
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param graine graine fixée pour la reproduction
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param graine graine fixee pour la reproduction
 #'
 #' @return EQM des 3 estimateurs
 #' @export
@@ -280,14 +280,14 @@ eqm.selon.alpha<-function(p_cause1,K,t_star,type1,type2,graine){
 
 # Graphiques
 
-#' Evolution du biais en fonction de la taille d'échantillon, selon le modèle à risques comp.
+#' Evolution du biais en fonction de la taille d'echantillon, selon le modele e risques comp.
 #'
-#' @param N Nombre d'échantillon
+#' @param N Nombre d'echantillon
 #' @param t_star fin de la fenêtre d'observation
 #' @param p proportion de TDL
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param graine graine fixée pour la reproduction
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param graine graine fixee pour la reproduction
 #'
 #' @return Graphique du biais en fonction de n
 #' @export
@@ -355,15 +355,15 @@ fonction_ggplot_evol_biais_alt <- function(N,t_star, p,type1,type2,graine=133) {
 }
 
 
-#' Boxplot des biais sur plusieurs échantillons selon le modèle à risques comp.
+#' Boxplot des biais sur plusieurs echantillons selon le modele e risques comp.
 #'
-#' @param K Nombre d'échantillon
-#' @param n taille d'échantillon
+#' @param K Nombre d'echantillon
+#' @param n taille d'echantillon
 #' @param p proportion de TDL
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
 #' @param t_star fin de la fenêtre d'observation
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param graine graine fixée pour la reproduction
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param graine graine fixee pour la reproduction
 #'
 #' @return Boxplot des 3 estimateurs
 #' @export
@@ -423,17 +423,17 @@ plots_scenario_1_alt <- function(K, n, p,type1,t_star,type2,graine=133){
 
 }
 
-# Utilisation des paramètres
+# Utilisation des parametres
 
 
 #' Evolution du biais pour differentes valeurs de p_cause1
 #'
-#' @param N Nombre d'échantillon
+#' @param N Nombre d'echantillon
 #' @param t_star fin de la fenêtre d'observation
-#' @param vect_cause1 vecteur de differentes probabilité de cause 1
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param graine graine fixée pour la reproduction
+#' @param vect_cause1 vecteur de differentes probabilite de cause 1
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param graine graine fixee pour la reproduction
 #'
 #' @return Graphique du biais selon les p_cause1
 #' @export
@@ -443,9 +443,13 @@ plots_scenario_1_alt <- function(K, n, p,type1,t_star,type2,graine=133){
 #' N <- 1000
 #' type1 <- "constant"
 #' type2 <- "constant"
-#' fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133)
+#' fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star,
+#' vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133)
 #'
-fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133) {
+fonction_compar_plotsn_lambda_alt_8p <- function(N,
+                                                 t_star,
+                                                 vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),
+                                                 type1,type2,graine=133) {
 
   library(gridExtra)
   library(ggplot2)
@@ -617,13 +621,13 @@ fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star, vect_cause1=c(0.2, 0.
 ### Evolution ####
 
 ######### EQM ##########
-#' Evolution de l'EQM pour plusieurs échantillons selon le modèle à risques compétitifs
+#' Evolution de l'EQM pour plusieurs echantillons selon le modele e risques competitifs
 #'
-#' @param K Nombre d'échantillon
-#' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
-#' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
+#' @param K Nombre d'echantillon
+#' @param type1 forme de la fonction de risque instantane (constant, increasing or decreasing)
+#' @param type2 forme de la fonction de risque instantane (constant, increasing or decreasing)
 #' @param p proportion de TDL
-#' @param graine graine fixée pour la reproduction
+#' @param graine graine fixee pour la reproduction
 #' @param t_star fin de la fenêtre d'observation
 #'
 #' @return Graphiques de l'EQM
