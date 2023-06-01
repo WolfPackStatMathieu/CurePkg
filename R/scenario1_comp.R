@@ -59,11 +59,11 @@ generation_comp<-function(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2
 #' @examples
 #' p_cause1 <- 0.5
 #' t_star <- 6
-#' N <- 1000
+#' N <- 10
 #' n <- 18
 #' type1 <- "constant"
 #' type2 <- "constant"
-#' prop_censure_alt(N,p_cause1,n,type1,type2,t_star,graine=133)
+#' prop_censure_alt(N=N,p_cause1=p_cause1,n=n,type1=type1,type2=type2,t_sta0=t_star,graine=133)
 #'
 prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
 
@@ -136,8 +136,8 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
 #' p_cause1 <- 0.5
 #' t_star <- 6
 #' n <- 18
-#' type1 <- constant
-#' type2 <- constant
+#' type1 <- "constant"
+#' type2 <- "constant"
 #' fonction_estim_comp_once(N,p_cause1,n,type1,type2,t_star,graine=133)
 #'
 fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
@@ -181,10 +181,10 @@ fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
 #' p_cause1 <- 0.5
 #' t_star <- 6
 #' n <- 18
-#' N <- 1000
+#' N <- 100
 #' type1 <- "constant"
 #' type2 <- "constant"
-#' Simuler_estim_mult_times(N,p_cause1,n,type1,type2,t_star,graine=133)
+#' Simuler_estim_mult_times(N=N,p_cause1=0.5,n=n,type1=type1,type2=type2,t_star=t_star,graine=133)
 #'
 Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
 
@@ -214,7 +214,7 @@ Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
 #' @examples
 #' p_cause1 <- 0.5
 #' t_star <- 6
-#' K <- 1000
+#' K <- 100
 #' type1 <- "constant"
 #' type2 <- "constant"
 #' biais.selon.lambda_alt(p_cause1=p_cause1,K=K, type1=type1,type2=type2,t_star=t_star,graine=133)
@@ -252,7 +252,7 @@ biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
 #' @examples
 #' p_cause1 <- 0.5
 #' t_star <- 6
-#' K <- 1000
+#' K <- 100
 #' type1 <- "constant"
 #' type2 <- "constant"
 #' eqm.selon.alpha(p_cause1=0.5,K=K,type1=type1,type2=type2,t_star=t_star,graine=133)
@@ -295,7 +295,7 @@ eqm.selon.alpha<-function(p_cause1,K,t_star,type1,type2,graine){
 #' @examples
 #' p <- 0.3
 #' t_star <- 6
-#' N <- 1000
+#' N <- 100
 #' type1 <- "constant"
 #' type2 <- "constant"
 #' fonction_ggplot_evol_biais_alt(N=N,t_star=t_star, p=p,type1=type1,type2=type2,graine=133)
@@ -371,7 +371,7 @@ fonction_ggplot_evol_biais_alt <- function(N,t_star, p,type1,type2,graine=133) {
 #' @examples
 #' p <- 0.3
 #' t_star <- 6
-#' K <- 1000
+#' K <- 100
 #' type1 <- "constant"
 #' type2 <- "constant"
 #' n <- 18
@@ -440,12 +440,11 @@ plots_scenario_1_alt <- function(K, n, p,type1,t_star,type2,graine=133){
 #'
 #' @examples
 #' t_star <- 6
-#' N <- 1000
+#' N <- 100
 #' type1 <- "constant"
 #' type2 <- "constant"
-#' fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star,
-#' vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133)
-#'
+#' fonction_compar_plotsn_lambda_alt_8p <- function(N,t_star,vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),type1,type2,graine=133)
+
 fonction_compar_plotsn_lambda_alt_8p <- function(N,
                                                  t_star,
                                                  vect_cause1=c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7,0.8),
@@ -634,7 +633,7 @@ fonction_compar_plotsn_lambda_alt_8p <- function(N,
 #' @export
 #'
 #' @examples
-#' K <- 1000
+#' K <- 100
 #' type1 <- "constant"
 #' p <- 0.3
 #' graine <- 133

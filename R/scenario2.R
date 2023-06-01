@@ -10,7 +10,6 @@
 #'
 #' @examples
 #' ######Test ######
-#' K<-10
 #' n<-100
 #' k1<-1
 #' lambda1<-3
@@ -143,7 +142,6 @@ Realisations_estim_cas_mult<-function(K,n,liste_params,nb_doses,t_star){
 #' k2<-1
 #' liste_2<-list(lb_test2,t_star2,p2,k2)
 #' names(liste_2)<-c("lambda","t_star","p","k")
-#'
 #'vecteur_param<-list(liste_parameter,liste_2)
 #'test<-plots_scenario_mult(K=10,n=100,liste_params = vecteur_param,t_star=6,nb_doses=2)
 plots_scenario_mult <- function(K, n,liste_params, t_star,nb_doses){

@@ -155,7 +155,7 @@ Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
 #'
 #' @examples
 #' ####test#####
-#' liste_biais<-biais.selon.k(n=100,lambda=2,t_star=6,p=0.33,K=100)
+#' liste_biais<-biais.selon.k(n=100,lambda=2,t_star=6,p=0.33,K=10)
 biais.selon.k <-function(K, n, lambda, t_star,p){
   k <- seq(0.8, 5, by = 0.1)
   results <- NULL
@@ -183,7 +183,7 @@ biais.selon.k <-function(K, n, lambda, t_star,p){
 #'
 #' @examples
 #' ######Test ######
-#' plot<-fnct_compar_plt_biais.selon.k1(N=100,n=100,window_lambda=c(1,2,4),t_tsar=6,p=0.33)
+#' plot<-fnct_compar_plt_biais.selon.k1(N=10,n=100,window_lambda=c(1,2,4),t_tsar=6,p=0.33)
 fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
   library(gridExtra)
   library(ggplot2)
@@ -331,7 +331,7 @@ biais.selon.lambda <-function(K, lambda, t_star,p, k){
 #' window_lambda<-c(0.2,0.5,0.1)
 #' p <- 0.3
 #' k <- 1
-#' result<-fonction_compar_plotsn_lambda1(N=N,window_lambda=window_lambda,t_star=t_star, p=p, k=k)
+#' result<-fonction_compar_plotsn_lambda1(N=10,window_lambda=window_lambda,t_star=t_star, p=p, k=k)
 fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
   library(gridExtra)
   library(ggplot2)
@@ -479,8 +479,7 @@ Calcul_biais_moyen_taillen<-function(K,n,lambda,t_star,p,k){
 #' ######Test ######
 #' t_star1<-6
 #' K<-10
-#' n<-100
-#' result<-biais.selon.taille_echantillon(K=K,t_star=t_star1,lambda=0.5,p=0.33,k=1)
+#' result<-biais.selon.taille_echantillon(K=10,t_star=6,lambda=0.5,p=0.33,k=1)
 biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
   require(ggplot2)
   require(gridExtra)
