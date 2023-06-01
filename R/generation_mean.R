@@ -42,7 +42,23 @@ fonction_generation_taille_mean<-function(vector_size,liste_parameter,K){
   value_means$Modele_bernoulli<-value_means$Modele_bernoulli-p
   return(value_means)
 }
+fonction_generation_taille_eqm<-function(vector_size,liste_parameter,K){
+  ### renvoie la g?n?ration avec des tailles diff?rentes du mod?le model (string) ayant comme param?tre la liste_parameter,
+  ### liste de param?tres avec le mod?les. 1 seul comme bernoulli et 2 pour exp() (lambda et t_star).
 
+  #on r?ordonne vector_size par ordre des tailles d'echantillon
+  vector_size<-vector_size[order(vector_size)]
+  ##### id?e.
+  Value_first<-lapply(vector_size,Simuler_biais_taillen,K=K,lambda=liste_parameter[['lambda']],t_star=liste_parameter[["t_star"]],
+                      p=liste_parameter[["p"]],k=liste_parameter[["k"]])
+  p<-liste_parameter[["p"]]
+  fonction_sapply<-function(x){
+    return(sapply(x,var))
+  }
+  value_eqm<-as.data.frame(t((sapply(Value_first,colMeans)-p)^2))+
+    as.data.frame(t(sapply(Value_first,fonction_sapply)))
+  return(value_eqm)
+}
 fonction_sapply<-function(x){
   return(sapply(x,var))
 }

@@ -133,12 +133,12 @@ prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
 #' @export
 #'
 #' @examples
-#' p_cause1 <- 0.5
-#' t_star <- 6
+#' p1 <- 0.5
+#' t <- 6
 #' n <- 18
-#' type1 <- "constant"
-#' type2 <- "constant"
-#' fonction_estim_comp_once(N,p_cause1,n,type1,type2,t_star,graine=133)
+#' t1 <- "constant"
+#' t2 <- "constant"
+#' fonction_estim_comp_once(p_cause1=p1,n=n,type1=t1,type2=t2,t_star=t,graine=133)
 #'
 fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
 

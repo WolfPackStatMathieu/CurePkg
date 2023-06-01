@@ -58,6 +58,7 @@ Generation_un_ech<-function(n,lambda,t_star,p,k){
 #' graph<-calcule_prop_censure(N=100,n=100,lambda=0.2,t_star=6,p=0.33,k=1)
 calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
   require(dplyr)
+  require(tidyr)
   require(ggplot2)
   #initialisation du dataframe
   result_censures<- as.data.frame(matrix(NA, nrow = length(N), 3))
@@ -77,7 +78,7 @@ calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
 
   # boxplot_plot_censures<-ggplot(result_censures) +
   violin_plot <- result_censures %>%
-    dplyr::gather(key="Type_de_censure", value="Val") %>%
+    tidyr::gather(key="Type_de_censure", value="Val") %>%
     ggplot2::ggplot( ggplot2::aes(x=Type_de_censure, y=Val, fill=Type_de_censure) ) +
     ggplot2::geom_violin() +
     ggplot2::ggtitle("Distribution des types de censure, modele de generation 1")+
@@ -183,7 +184,7 @@ biais.selon.k <-function(K, n, lambda, t_star,p){
 #'
 #' @examples
 #' ######Test ######
-#' plot<-fnct_compar_plt_biais.selon.k1(N=10,n=100,window_lambda=c(1,2,4),t_tsar=6,p=0.33)
+#' plot<-fnct_compar_plt_biais.selon.k1(N=10,n=100,window_lambda=c(1,2,4),t_star=6,p=0.33)
 fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
   library(gridExtra)
   library(ggplot2)
@@ -614,6 +615,6 @@ eqm.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
                              as.character(k)))}
 
   gg <- {gridExtra::grid.arrange(gg1, gg2, ncol = 2, widths = c(7,7)
-                      ,top =textGrob("Evolution de l'EQM en fonction de la taille d'echantillon n",gp=gpar(fontsize=24,font=3)))}
+                      ,top =grid::textGrob("Evolution de l'EQM en fonction de la taille d'echantillon n",gp=grid::gpar(fontsize=24,font=3)))}
 
 }

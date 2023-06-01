@@ -20,7 +20,7 @@
 #' sous_liste2<-list(k2,lambda2,0.5)
 #' names(sous_liste2)<-c("k","lambda","p")
 #' ls<-list(sous_liste1,sous_liste2)
-#' result<-function_estim_doses(n=100,liste_params=ls,nb_doses=len(ls),t_star=6)
+#' result<-function_estim_doses(n=100,liste_params=ls,nb_doses=length(ls),t_star=6)
 function_estim_doses<-function(n,liste_params,nb_doses,t_star){
   require(dfcrm)
   df<-matrix(NA,n,4)
