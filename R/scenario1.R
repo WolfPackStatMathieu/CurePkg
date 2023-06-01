@@ -1,4 +1,5 @@
 #source("estimateurs.R")
+#source("generation_mean.R")
 #' Generer un echantillon de taille n selon le modèle de guérison à mélange.
 #'
 #' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
@@ -479,11 +480,10 @@ Calcul_biais_moyen_taillen<-function(K,n,lambda,t_star,p,k){
 #' t_star1<-6
 #' K<-10
 #' n<-100
-#' result<-biais.selon.taille_echantillon(K=K,t_star=t_star1,lambda=0.5,p=0.33,k=2)
+#' result<-biais.selon.taille_echantillon(K=K,t_star=t_star1,lambda=0.5,p=0.33,k=1)
 biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
   require(ggplot2)
   require(gridExtra)
-  # On fixe un n de d?part ? 10 individus et on incr?ment par 5 jusqu'a 100
   debut <- 20
   fin <- 100
   pas <- 5

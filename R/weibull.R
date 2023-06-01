@@ -10,7 +10,7 @@
 #' @examples
 #' test_simul<-simul_weibull(100,0.1,1)
 simul_weibull<-function(n,lambda,k){
- return(rweibull(n,shape=k,scale=1/lambda))
+ return(stats::rweibull(n,shape=k,scale=1/lambda))
 }
 #' Trouver le quantile a t_star de la fonction de survie (Kaplan-Meier).
 #'
