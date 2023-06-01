@@ -493,7 +493,6 @@ biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
   names(liste_parameter)<-c("lambda","t_star","p","k")
   result_final <- fonction_generation_taille_mean(vector_size = n, liste_parameter = liste_parameter, K=K)
   result_final$n <- n
-
   colnames(result_final) <- c("modele_bernoulli","modele_survie", "modele_guerison", "taille_echantillon")
   # plot
   borne_min <- min(result_final$modele_guerison, result_final$modele_survie,result_final$modele_bernoulli)

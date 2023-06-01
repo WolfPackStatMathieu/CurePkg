@@ -184,7 +184,7 @@ fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
 #' N <- 100
 #' type1 <- "constant"
 #' type2 <- "constant"
-#' Simuler_estim_mult_times(N=N,p_cause1=0.5,n=n,type1=type1,type2=type2,t_star=t_star,graine=133)
+#' Simuler_estim_mult_times(K=N,p_cause1=0.5,n=n,type1=type1,type2=type2,t_star=t_star,graine=133)
 #'
 Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
 
