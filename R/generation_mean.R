@@ -31,6 +31,7 @@
 #' main="The mean bias according to the size with Survival function")
 #' points(x=donnees_taille_biaismoyen$Size,y=donnees_taille_biaismoyen$Mean_Bias_Surv,col="red")
 fonction_generation_taille_mean<-function(vector_size,liste_parameter,K){
+
   vector_size<-vector_size[order(vector_size)]
   Value_bias<-lapply(vector_size,Simuler_biais_taillen,K=K,lambda=liste_parameter[['lambda']],t_star=liste_parameter[["t_star"]],
                      p=liste_parameter[["p"]],k=liste_parameter[["k"]])
