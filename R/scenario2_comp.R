@@ -222,6 +222,7 @@ evol_biais_comp<-function(K,probabilite_a_priori,t_star,type1,type2,graine_depar
 #' @param probabilite_a_priori Valeur des probabilités de toxicité pour chaque dose.
 #' @param type1 type de fonction de risque pour l'évènement de la toxicité.
 #' @param type2 type de fonction de risque pour l'évènement de la guérison.
+#' @param t_star fin de la fenêtre d'observation.
 #' @return Liste de ggplots.
 #' @export
 #'

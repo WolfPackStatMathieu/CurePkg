@@ -114,7 +114,7 @@ Realisations_estim_cas_mult<-function(K,n,liste_params,nb_doses,t_star){
     ensemble_obs_dosek<-as.data.frame(ensemble_obs_dosek)
     ensemble_obs_dosek$estimateur_bernoulli<-as.numeric(ensemble_obs_dosek$estimateur_bernoulli)
     ensemble_obs_dosek$estimateur_guerison<-as.numeric(ensemble_obs_dosek$estimateur_guerison)
-    ensemble_obs_dosek$estimateur_modele_survie<-as.numeric(ensemble_obs_dosek$estimateur_survie)
+    ensemble_obs_dosek$estimateur_survie<-as.numeric(ensemble_obs_dosek$estimateur_survie)
     ensemble_obs_dosek$p<-as.numeric(ensemble_obs_dosek$p)
     matrice[[j]]<-ensemble_obs_dosek}
   return(matrice)
@@ -125,6 +125,7 @@ Realisations_estim_cas_mult<-function(K,n,liste_params,nb_doses,t_star){
 #' @param nb_doses Nombre de doses. Ce nombre correspond à la longueur de liste_params.
 #' @param liste_params liste contenant plusieurs sous-listes. Chaque sous-liste contient le lambda et le k de chaque dose.
 #' @param t_star fin de la fenetre d'observation
+#' @param K nombre de répétitions de l'expérience.
 #' @return
 #' @export
 #'
@@ -152,11 +153,11 @@ plots_scenario_mult <- function(K, n,liste_params, t_star,nb_doses){
   result<-list(rep(NA,nb_doses))
   # on renomme les colonnes
   for (j in c(1:nb_doses)){
-    p<-liste_params[["p"]]
-    lambda<-liste_params[["lambda"]]
-    k<-liste_params[["k"]]
+    p<-liste_params[[j]][["p"]]
+    lambda<-liste_params[[j]][["lambda"]]
+    k<-liste_params[[j]][["k"]]
     res_j<-as.data.frame(res[[j]][,c("estimateur_bernoulli","estimateur_guerison","estimateur_survie")])-res[[j]]$p
-    colnames(res_j) <- c("Bernoulli", "Gu?rison", "SUrvie")
+    colnames(res_j) <- c("Bernoulli", "Guerison", "Survie")
 
     # bornes
     borne_min <- min(res_j)
@@ -169,23 +170,23 @@ plots_scenario_mult <- function(K, n,liste_params, t_star,nb_doses){
     df <- res_j %>% gather(key = "modele", value = "valeurs")
 
     # boxplot
-    boxplot <- ggplot(df, aes(x = modele, y = valeurs, fill = modele)) +
-      geom_violin(alpha = 0.8) +
-      scale_fill_manual(values = c("#0072B2", "#E69F00","Sky blue")) +
-      theme_classic()+
-      ylim(borne_min, borne_max)
+    boxplot <- ggplot2::ggplot(df, ggplot2::aes(x = modele, y = valeurs, fill = modele)) +
+      ggplot2::geom_violin(alpha = 0.8) +
+      ggplot2::scale_fill_manual(values = c("#0072B2", "#E69F00","Sky blue")) +
+      ggplot2::theme_classic()+
+      ggplot2::ylim(borne_min, borne_max)
 
     # Add labels and title
     result[[j]]<-{boxplot +
-        labs(x = "Mod?les", y = "Biais moyen",
-             title = "Comparaison du biais moyen pour K n-?chantillons",
+        ggplot2::labs(x = "Mod?les", y = "Biais moyen",
+             title = "Comparaison du biais moyen pour K n-echantillons",
              caption = sprintf("K = %s, lambda = %s, k = %s, n = %s,p=%s" ,
                                as.character(K),
                                as.character(lambda),
                                as.character(k),
                                as.character(n),
                                as.character(p))) +
-        theme(plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
+        ggplot2::theme(plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
               axis.text = element_text(size = 12),
               axis.title = element_text(size = 12, face = "bold"))}
   }
@@ -279,7 +280,7 @@ print_mean_mult_doses<-function(N,liste_parameter,limit_inf,limit_sup)
 #' @param size nombre d'individus considérés.
 #' @param K nombre d'échantillons générés.
 #' @param nb_doses Nombre de doses. Ce nombre correspond à la longueur de liste_params.
-#' @param liste_params liste contenant plusieurs sous-listes. Chaque sous-liste contient le lambda et le k de chaque dose.
+#' @param vecteur_param liste contenant plusieurs sous-listes. Chaque sous-liste contient le lambda et le k de chaque dose.
 #' @param t_star fin de la fenetre d'observation
 #' @return Liste. Valeur du biais pour chaque échantillon pour chaque estimateur.
 #' @export

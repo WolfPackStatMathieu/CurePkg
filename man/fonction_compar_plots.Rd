@@ -15,11 +15,13 @@ fonction_compar_plots(limit_inf, limit_sup, N, p, lambda, t_star, K, sh)
 
 \item{p}{probabilite selon le modele de guerison de toxicite.}
 
-\item{lambda}{parametre de la fonction de survie.}
+\item{lambda}{parametre d'échelle (scale) de la loi weibull.}
 
 \item{t_star}{fin de la fenetre d'observation}
 
 \item{K}{nombre de simulations de la meme taille d'echantillon.}
+
+\item{sh}{paramètre de la loi weibull.}
 }
 \value{
 Plot des valeurs des biais moyens selon la taille des echantillons.

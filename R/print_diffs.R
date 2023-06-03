@@ -4,7 +4,8 @@
 #' @param limit_sup taille maximale des echantillons
 #' @param N nombre de tailles d'echantillon differents.
 #' @param p probabilite selon le modele de guerison de toxicite.
-#' @param lambda parametre de la fonction de survie.
+#' @param lambda parametre d'échelle (scale) de la loi weibull.
+#' @param sh paramètre de la loi weibull.
 #' @param t_star fin de la fenetre d'observation
 #' @param K nombre de simulations de la meme taille d'echantillon.
 #'

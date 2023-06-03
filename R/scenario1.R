@@ -179,7 +179,6 @@ biais.selon.k <-function(K, n, lambda, t_star,p){
 #' @param t_star fin de la fenetre d'observation
 #' @param n nombre d'individus considérés.
 #' @param p proportion de non-guéris.
-#' @param t_tsar fin de la fenêtre d'observation.
 #'
 #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
 #' @export
@@ -324,6 +323,7 @@ biais.selon.lambda <-function(K, lambda, t_star,p, k){
 #' @param N nombre de tailles d'echantillon differents.
 #' @param window_lambda un vecteur de valeurs pour lambda
 #' @param t_star fin de la fenetre d'observation
+#' @param k paramètre de forme de la loi weibull.
 #' @param p proportion de non-guéris.
 #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
 #' @export
