@@ -5,7 +5,8 @@
 #' @param n : taille de l'echantillon permettant d'obtenir un estimateur.
 #' @param lambda : parametre de la loi weibull.
 #' @param t_star : Fin de la fenetre d'observation.
-#' @param k : paramètre de la loi weibull.
+#' @param k : paramètre de la loi weibull
+#' @param p proportion de non-guéris.
 #'
 #' @return : Un n-echantillon.
 #' @export
@@ -55,7 +56,7 @@ Generation_un_ech<-function(n,lambda,t_star,p,k){
 #'
 #' @examples
 #' ####test#####
-#' graph<-calcule_prop_censure(N=100,n=100,lambda=0.2,t_star=6,p=0.33,k=1)
+#' graph<-calcule_prop_censure(N=10,n=100,lambda=0.2,t_star=6,p=0.33,k=1)
 calcule_prop_censure<-function(N, n, lambda, t_star, p, k){
   require(dplyr)
   require(tidyr)
@@ -128,7 +129,7 @@ Simuler_biais_un_n_ech<-function(n,lambda,t_star,p,k){
 #'
 #' @examples
 #' ####test#####
-#' vecteur_estims<-Simuler_biais_taillen(n=100,lambda=2,t_star=6,p=0.33,k=1,K=100)
+#' vecteur_estims<-Simuler_biais_taillen(n=100,lambda=2,t_star=6,p=0.33,k=1,K=10)
 Simuler_biais_taillen<-function(K,n,lambda,t_star,p,k){
   # Simuler_biais_un_n_ech retourne le biais du modele de guerison
   # et le biais du modele de survie
@@ -177,6 +178,7 @@ biais.selon.k <-function(K, n, lambda, t_star,p){
 #' @param window_lambda  ensemble des valeurs de lambda considérées.
 #' @param t_star fin de la fenetre d'observation
 #' @param n nombre d'individus considérés.
+#' @param p proportion de non-guéris.
 #' @param t_tsar fin de la fenêtre d'observation.
 #'
 #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
@@ -291,7 +293,8 @@ fnct_compar_plt_biais.selon.k1 <- function(N, n, window_lambda, t_star, p) {
 #'
 #' @param K  nombre d'échantillons créées par taille d'échantillon.
 #' @param lambda  paramètre de la loi weibull.
-#' @param t_star fin de la fenetre d'observation
+#' @param t_star fin de la fenetre d'observation.
+#' @param k paramètre de forme (shape) de la loi weibull.
 #' @param p proportion de non-guéris.
 #' @return Dataframe. Pour chaque estimateur, valeur du biais moyen selon la taille de l'échantillon.
 #' @export
@@ -321,7 +324,7 @@ biais.selon.lambda <-function(K, lambda, t_star,p, k){
 #' @param N nombre de tailles d'echantillon differents.
 #' @param window_lambda un vecteur de valeurs pour lambda
 #' @param t_star fin de la fenetre d'observation
-#'
+#' @param p proportion de non-guéris.
 #' @return Plot des valeurs des biais moyens en fonction du lambda et de la taille des echantillons.
 #' @export
 #'
@@ -442,6 +445,7 @@ fonction_compar_plotsn_lambda1 <- function(N, window_lambda, t_star, p, k) {
 #' @param lambda paramètre de la loi Weibull (scale).
 #' @param t_star fin de la fenetre d'observation
 #' @param k paramètre de la loi Weibull (shape).
+#' @param p proportion de non-guéris.
 #' @return Liste. Valeur du biais moyen pour les trois estimateurs.
 #' @export
 #'
@@ -473,6 +477,7 @@ Calcul_biais_moyen_taillen<-function(K,n,lambda,t_star,p,k){
 #' @param lambda paramètre de la loi Weibull (scale).
 #' @param t_star fin de la fenetre d'observation
 #' @param k paramètre de la loi Weibull (shape).
+#' @param p proportion de non-guéris.
 #' @return Ggplot. Valeur du biais moyen pour les trois estimateurs pour n allant de 20 à 100.
 #' @export
 #'
@@ -550,6 +555,7 @@ biais.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
 #' @param lambda paramètre de la loi Weibull (scale).
 #' @param t_star fin de la fenetre d'observation
 #' @param k paramètre de la loi Weibull (shape).
+#' @param p proportion de non-guéris.
 #' @return Ggplot. Valeur de l'eqm moyen pour les trois estimateurs pour n allant de 20 à 100.
 #' @export
 #'

@@ -5,8 +5,8 @@
 
 #' Generer un echantillon selon un modele e risques competitifs
 #'
-#' @param p_cause1 probabilite pour la cause 1 e t_star
-#' @param p_cause2 probabilite pour la cause 1 e t_star
+#' @param p_cause1 probabilite pour la cause 1 de l'évènement "toxicité" avant t_star.
+#' @param p_cause2 probabilite pour la cause 2 de l'évènement "guérison" avant t_star.
 #' @param t_star fin de la fenêtre d'observation
 #' @param nombre_obs taille d'echantillon
 #' @param graine graine fixee pour la reproduction
@@ -63,7 +63,7 @@ generation_comp<-function(p_cause1,p_cause2,t_star,nombre_obs,graine,type1,type2
 #' n <- 18
 #' type1 <- "constant"
 #' type2 <- "constant"
-#' prop_censure_alt(N=N,p_cause1=p_cause1,n=n,type1=type1,type2=type2,t_sta0=t_star,graine=133)
+#' prop_censure_alt(N=N,p_cause1=p_cause1,n=n,type1=type1,type2=type2,t_star=t_star,graine=133)
 #'
 prop_censure_alt <- function(N,p_cause1,n,type1,type2,t_star,graine=133){
 
@@ -214,7 +214,7 @@ Simuler_estim_mult_times<-function(K,p_cause1,n,type1,type2,t_star,graine){
 #' @examples
 #' p_cause1 <- 0.5
 #' t_star <- 6
-#' K <- 100
+#' K <- 10
 #' type1 <- "constant"
 #' type2 <- "constant"
 #' biais.selon.lambda_alt(p_cause1=p_cause1,K=K, type1=type1,type2=type2,t_star=t_star,graine=133)
@@ -252,7 +252,7 @@ biais.selon.lambda_alt <-function(p_cause1,K,t_star,type1,type2,graine){
 #' @examples
 #' p_cause1 <- 0.5
 #' t_star <- 6
-#' K <- 100
+#' K <- 10
 #' type1 <- "constant"
 #' type2 <- "constant"
 #' eqm.selon.alpha(p_cause1=0.5,K=K,type1=type1,type2=type2,t_star=t_star,graine=133)

@@ -1,7 +1,7 @@
 #' Calcul du biais pour chaque dose pour chaque estimateur. Un seul échantillon est utilisé.
 #'
 #' @param n nombre d'individus considérés.
-#' @param probabilite_a_priori vecteur des probabilités de toxicité pour chaque dose.
+#' @param probabilite_a_priori vecteur des proportions de non-guéris pour chaque dose.
 #' @param type1 type de fonction de risque pour l'évènement de la toxicité.
 #' @param type2 type de fonction de risque pour l'évènement de la guérison.
 #' @param t_star fin de la fenetre d'observation
@@ -85,7 +85,7 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
 #'
 #' @param K Nombre d'échantillon
 #' @param n taille d'échantillon
-#' @param probabilite_a_priori probabilité à priori
+#' @param probabilite_a_priori vecteur de la proportion de non-guéris pour chaque dose.
 #' @param t_star fin de la fenêtre d'observation
 #' @param type1 forme de la fonction de risque instantané (constant, increasing or decreasing)
 #' @param type2 forme de la fonction de risque instantané (constant, increasing or decreasing)
@@ -95,14 +95,14 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
 #' @export
 #'
 #' @examples
-#' K <- 1000
-#' t_star <- 6
-#' n <- 18
-#' graine_depart <- 133
-#' type1 <- "constant"
-#' type2 <- "constant"
-#' probabilite_a_priori <- c(0,5,0.75,0.2, 0.3)
-#' generation_comp_mean(K=K,n,probabilite_a_priori,t_star,type1,type2,graine_depart)
+#' K <- 10
+#' t<- 6
+#' n <- 20
+#' graine <- 133
+#' t1 <- "constant"
+#' t2 <- "constant"
+#' proba <- c(0.5,0.7)
+#' generation_comp_mean(K=K,n=n,probabilite_a_priori=proba,t_star=t,type1=t1,type2=t2,graine_depart=graine)
 #'
 
 generation_comp_mean<-function(K,n,probabilite_a_priori,t_star,type1,type2,graine_depart){
@@ -202,7 +202,7 @@ evol_n_par_dose<-function(results,n,i,K=K,type1,type2){
 #' ######Test ######
 #' t1<-"increasing"
 #' t2<-"increasing"
-#' biais<-evol_biais_comp(K=100,probabilite_a_priori=c(0.33,0.5),type1=t1,type2=t2,t_star=6,graine_depart=133)
+#' biais<-evol_biais_comp(K=10,probabilite_a_priori=c(0.33,0.5),type1=t1,type2=t2,t_star=6,graine_depart=133)
 evol_biais_comp<-function(K,probabilite_a_priori,t_star,type1,type2,graine_depart=133){
   debut <- 20
   fin <- 100
@@ -227,7 +227,7 @@ evol_biais_comp<-function(K,probabilite_a_priori,t_star,type1,type2,graine_depar
 #'
 #' @examples
 #' ######Test ######
-#' biais<-evol_eqm_comp(K=100,probabilite_a_priori=c(0.33,0.5),
+#' biais<-evol_eqm_comp(K=10,probabilite_a_priori=c(0.33,0.5),
 #' type1="increasing",type2="increasing",t_star=6)
 evol_eqm_comp<-function(K,probabilite_a_priori,t_star,type1,graine_depart=133,type2){
   debut <- 20
@@ -312,18 +312,19 @@ evol_n_par_dose_eqm<-function(results,n,i,K=K,type1,type2){
 #'Calculer l'EQM pour chaque dose sur K n-échantillons.
 #'
 #' @param K nombre de graines considérées.
-#' @param i indice de la dose analysée.
 #' @param n taille de l'échantillon.
+#' @param t_star fin de la fenêtre d'observation.
 #' @param type1 type de fonction de risque pour l'évènement de la toxicité.
 #' @param type2 type de fonction de risque pour l'évènement de la guérison.
 #' @param graine_depart graine de départ utilisée.
+#' @param probabilite_a_priori proportion pour chaque dose de non-guéris.
 #' @return Un dataframe. Valeur de l'EQM pour chaque dose/méthode.
 #' @export
 #'
 #' @examples
 #' ######Test ######
 #' Geqm<-generation_comp_eqm(
-#' K=100,n=100,probabilite_a_priou=c(0.3,0.5),
+#' K=100,n=100,probabilite_a_priori=c(0.3,0.5),
 #' type1="constant",graine_depart=133,type2="increasing",t_star=6)
 generation_comp_eqm<-function(K,n,probabilite_a_priori,t_star,type1,graine_depart=133,type2){
   require(ggplot2)
