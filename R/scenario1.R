@@ -624,3 +624,12 @@ eqm.selon.taille_echantillon <- function(K, lambda, t_star, p, k){
                       ,top =grid::textGrob("Evolution de l'EQM en fonction de la taille d'echantillon n",gp=grid::gpar(fontsize=24,font=3)))}
 
 }
+#' Changer la méthode d'optimisation par défaut du programme.
+#'
+#' @param nom_methode nom de la méthode choisie.
+changer_methode_optimisation<-function(nom_methode){
+  require(optimx)
+  vecteur_nom<-c("L-BFGS-B","Nelder-Mead","BFGS")
+  if (nom_methode %in% vecteur_nom)
+  {options(default.optim.method = nom_methode)}
+}

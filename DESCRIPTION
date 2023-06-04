@@ -25,4 +25,5 @@ Imports:
     dplyr,
     npcure,
     tidyr,
-    grid
+    grid,
+    optimx
