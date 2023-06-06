@@ -33,7 +33,7 @@ function_estim_doses_comp<-function(n,probabilite_a_priori,t_star,type1,type2,gr
     n_k<-length(index_dosek)
     df[index_dosek,]<-cbind(rep(k,n_k),generation_comp(p_cause1=p,p_cause2=1-p,t_star,nombre_obs=n_k,type1=type1,type2=type2,graine=graine))
     df$tox_time<-ifelse(df$statut==2,t_star+1,df$tox_time)
-    df$is_observed<-ifelse(df$tox_time>t_star,0,1)
+    df$is_observed<-ifelse(df$tox_time>=t_star,0,1)
     data_returns[k,"estimateur_bernoulli"]<-fonction_Bern(df[index_dosek,])
     data_returns[k,"p"]<-p
   }

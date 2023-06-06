@@ -145,7 +145,7 @@ fonction_estim_comp_once<-function(p_cause1,n,type1,type2,t_star,graine=133){
   p_cause2<-(1-p_cause1)
   data<-generation_comp(p_cause1 = p_cause1,p_cause2=p_cause2,t_star=t_star,nombre_obs = n,type1=type1,type2=type2,graine = graine)
   data$tox_time<-ifelse(data$status==2,t_star+1,data$tox_time)
-  data$is_observed<-ifelse(data$tox_time>t_star,0,1)
+  data$is_observed<-ifelse(data$tox_time>=t_star,0,1)
   indices_non_obs<-which(data$is_observed==0)
   if(length(indices_non_obs)==n){
     # tous pas observes donc censures
